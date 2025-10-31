@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FreshCart — Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <%- include('partials/sidebar') %>
+        <%- include('partials/category-sidebar') %>
+            <%- include('partials/header') %>
+
+
+                <section class="section admin-section">
+                    <div class="admin-tabs">
+                        <div class="tab active" data-tab="products">Products</div>
+                        <div class="tab" data-tab="blogs">Blogs</div>
+                        <div class="tab" data-tab="banners">Banners</div>
+                        <div class="tab" data-tab="categories">Categories</div>
+                    </div>
+                    <div class="admin-content products-content active">
+                        <h3>Manage Products</h3>
+                        <form action="/admin/add" method="POST" class="admin-form">
+                            <input type="text" name="name" placeholder="Name" required>
+                            <select name="category" required>
+                                <% leafCategories.forEach(cat=> { %>
+                                    <option value="<%= cat._id %>">
+                                        <%= cat.name %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <input type="number" name="price" placeholder="Price" step="0.01" required>
+                            <input type="text" name="images" placeholder="Images (comma-separated URLs)" required
+                                onchange="previewImages(this)">
+                            <div class="image-preview"></div>
+                            <textarea name="description" placeholder="Description"></textarea> <!-- Not required -->
+                            <input type="text" name="features" placeholder="Features (comma-separated)">
+                            <select name="unit" required>
+                                <option value="kg">per kg</option>
+                                <option value="lb">per lb</option>
+                                <option value="quantity" selected>per quantity</option>
+                            </select>
+                            <button type="submit" class="add-btn">Add Product</button>
+                        </form>
+                        <input type="text" id="productSearch" placeholder="Search products..." class="search-input">
+                        <table class="admin-table" id="productTable">
+                            <thead>
+                                <tr>
+                                    <th data-sort="name">Name</th>
+                                    <th data-sort="category">Category</th>
+                                    <th data-sort="price">Price</th>
+                                    <th>Unit</th>
+                                    <th>Images</th>
+                                    <th>Description</th>
+                                    <th>Features</th>
+                                    <th data-sort="ratings">Ratings</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% products.forEach(product=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= product.name %>
+                                        </td>
+                                        <td>
+                                            <%= product.category ? product.category.name : '' %>
+                                        </td>
+                                        <td>$<%= product.price.toFixed(2) %>
+                                        </td>
+                                        <td>
+                                            <%= product.unit %>
+                                        </td>
+                                        <td><img src="<%= product.images ? product.images[0] : product.image %>"
+                                                style="width:50px;"></td>
+                                        <td>
+                                            <%= product.description ? product.description.substring(0, 50) + '...' : ''
+                                                %>
+                                        </td>
+                                        <td>
+                                            <%= product.features ? product.features.join(', ') : '' %></td>
+                                        <td><%= product.ratings %> ★</td>
+                                        <td>
+                                            <a href="/admin/edit/<%= product._id %>" class="edit-link">Edit</a>
+                                            <a href="/admin/delete/<%= product._id %>" class="delete-link">Delete</a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-content blogs-content">
+                        <h3>Manage Blogs</h3>
+                        <form action="/admin/add-blog" method="POST" class="admin-form">
+                            <input type="text" name="title" placeholder="Title" required>
+                            <textarea name="content" placeholder="Content" required></textarea>
+                            <input type="text" name="image" placeholder="Image URL" required onchange="previewImages(this)">
+                            <div class="image-preview"></div>
+                            <button type="submit" class="add-btn">Add Blog</button>
+                        </form>
+                        <input type="text" id="blogSearch" placeholder="Search blogs..." class="search-input">
+                        <table class="admin-table" id="blogTable">
+                            <thead>
+                                <tr>
+                                    <th data-sort="title">Title</th>
+                                    <th>Content (Snippet)</th>
+                                    <th>Image</th>
+                                    <th data-sort="date">Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% blogs.forEach(blog => { %>
+                                    <tr>
+                                        <td><%= blog.title %></td>
+                                        <td><%= blog.content.substring(0, 50) + ' ...' %>
+                                        </td>
+                                        <td><img src="<%= blog.image %>" style="width:50px;"></td>
+                                        <td>
+                                            <%= blog.date %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/edit-blog/<%= blog._id %>" class="edit-link">Edit</a>
+                                            <!-- Add route if needed -->
+                                            <a href="/admin/delete-blog/<%= blog._id %>" class="delete-link">Delete</a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-content banners-content">
+                        <h3>Manage Banners</h3>
+                        <form action="/admin/add-banner" method="POST" class="admin-form">
+                            <select name="type" required>
+                                <option value="hero">Hero</option>
+                                <option value="side">Side</option>
+                            </select>
+                            <input type="text" name="image" placeholder="Image URL" required
+                                onchange="previewImages(this)">
+                            <div class="image-preview"></div>
+                            <input type="text" name="title" placeholder="Title">
+                            <input type="text" name="text" placeholder="Text">
+                            <input type="text" name="link" placeholder="Link URL">
+                            <button type="submit" class="add-btn">Add Banner</button>
+                        </form>
+                        <input type="text" id="bannerSearch" placeholder="Search banners..." class="search-input">
+                        <table class="admin-table" id="bannerTable">
+                            <thead>
+                                <tr>
+                                    <th data-sort="type">Type</th>
+                                    <th>Image</th>
+                                    <th data-sort="title">Title</th>
+                                    <th>Text</th>
+                                    <th>Link</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% banners.forEach(banner=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= banner.type %>
+                                        </td>
+                                        <td><img src="<%= banner.image %>" style="width:50px;"></td>
+                                        <td>
+                                            <%= banner.title %>
+                                        </td>
+                                        <td>
+                                            <%= banner.text %>
+                                        </td>
+                                        <td>
+                                            <%= banner.link %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/edit-banner/<%= banner._id %>" class="edit-link">Edit</a>
+                                            <!-- Add route if needed -->
+                                            <a href="/admin/delete-banner/<%= banner._id %>"
+                                                class="delete-link">Delete</a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-content categories-content">
+                        <h3>Manage Categories</h3>
+                        <form action="/admin/add-category" method="POST" class="admin-form">
+                            <input type="text" name="name" placeholder="Category Name" required>
+                            <select name="parent">
+                                <option value="">No Parent (Top Level)</option>
+                                <% categories.forEach(cat=> { %>
+                                    <option value="<%= cat._id %>">
+                                        <%= cat.name %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <input type="text" name="image" placeholder="Category Image URL">
+                            <textarea name="description" placeholder="Category Description"></textarea>
+                            <button type="submit" class="add-btn">Add Category</button>
+                        </form>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Parent</th>
+                                    <th>Image</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% categories.forEach(cat=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= cat.name %>
+                                        </td>
+                                        <td>
+                                            <%= cat.parent ? cat.parent.name : 'None' %>
+                                        </td>
+                                        <td><img src="<%= cat.image %>" style="width:50px;" alt="Category Image"></td>
+                                        <td>
+                                            <%= cat.description ? cat.description.substring(0, 50) + '...' : '' %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/edit-category/<%= cat._id %>" class="edit-link">Edit</a>
+                                            <a href="/admin/delete-category/<%= cat._id %>"
+                                                class="delete-link">Delete</a>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <%- include("partials/footer") %>
+
+                    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+                    <script src="/js/scripts.js"></script>
+</body>
+
+</html>

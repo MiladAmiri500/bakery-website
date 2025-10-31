@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FreshCart — About Us</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <%- include('partials/sidebar') %>
+        <%- include('partials/category-sidebar') %>
+            <%- include('partials/header') %>
+
+                <main>
+                    <section class="hero">
+                        <div class="hero-content">
+                            <h1>Our Story is Fresh Every Day</h1>
+                            <p class="text-lead">Quality, freshness, and community in every aisle.</p>
+                        </div>
+                    </section>
+
+                    <section class="section-padding">
+                        <div class="container about-grid">
+                            <div class="about-text">
+                                <h2>From a Single Seed of Inspiration...</h2>
+                                <p class="text-lead">FreshCart wasn't born from a business plan. It was born from a
+                                    passion: the joy of fresh produce, the satisfaction of quality ingredients, the
+                                    warmth of a neighborhood market.</p>
+                                <p>Our founder, Alex Rivera, spent years sourcing the best local goods, learning from
+                                    farmers and suppliers before opening our doors in 2015 with one mission: to bring
+                                    fresh, affordable, and sustainable groceries to every family.</p>
+                            </div>
+                            <div class="about-image">
+                                <img src="https://images.unsplash.com/photo-1579113800032-c38a775f2345"
+                                    alt="Our founder smiling in the store">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="values-section container-fluid">
+                        <div class="container">
+                            <h2>Our Philosophy</h2>
+                            <div class="values-grid">
+                                <div class="value-card">
+                                    <div class="value-icon"><i class="fas fa-leaf"></i></div>
+                                    <h3>Quality Ingredients</h3>
+                                    <p>We source local, organic produce and goods. No shortcuts, just fresh and natural.
+                                    </p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-icon"><i class="fas fa-hand-sparkles"></i></div>
+                                    <h3>Sustainable Practices</h3>
+                                    <p>We prioritize eco-friendly sourcing and packaging to protect our planet.</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-icon"><i class="fas fa-heart"></i></div>
+                                    <h3>Community Focus</h3>
+                                    <p>We're more than a store; we're your neighbor, supporting local farmers and
+                                        causes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="section-padding">
+                        <div class="container about-grid reverse-mobile">
+                            <div class="process-images">
+                                <img src="https://images.unsplash.com/photo-1603048297172-4c3c54e74509"
+                                    alt="Fresh fruits being selected" class="img-large">
+                                <img src="https://images.unsplash.com/photo-1589927986089-35812388d1a6"
+                                    alt="Close-up of organic vegetables" class="img-small">
+                            </div>
+                            <div class="about-text">
+                                <h2>Fresh with Care & Quality</h2>
+                                <p class="text-lead">In a fast world, we choose freshness and sustainability.</p>
+                                <p>Our produce is hand-picked daily from trusted farms. Our shelves are stocked with
+                                    care, ensuring every item meets our high standards. This dedication creates a
+                                    shopping experience that's healthy, convenient, and joyful.</p>
+                                <p>When you shop with us, you're getting the best nature has to offer.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="team-section container-fluid">
+                        <div class="container">
+                            <div class="team-card">
+                                <div class="team-image">
+                                    <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578"
+                                        alt="A smiling team member stocking shelves">
+                                </div>
+                                <div class="team-info">
+                                    <h3>A Word From Our Store Manager</h3>
+                                    <p>"FreshCart is about more than groceries—it's about nourishing lives. Seeing
+                                        families leave with smiles and full carts makes every day rewarding."</p>
+                                    <p><strong>- Jordan Lee, Store Manager</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="container">
+                        <section class="cta-section">
+                            <div class="cta-content">
+                                <h2>Come Shop Fresh!</h2>
+                                <p class="text-lead">We're
+                                    stocking something special just for you. <br>Visit our store and experience the
+                                    freshness of FreshCart.</p>
+                                <a href="/products" class="btn-primary">Explore Our Products</a>
+                            </div>
+                        </section>
+                    </div>
+                </main>
+
+                <%- include('partials/footer') %>
+</body>
+
+</html>

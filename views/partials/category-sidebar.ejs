@@ -1,0 +1,18 @@
+<div class="sidebar" id="categorySidebar">
+    <div class="head">
+        <strong>All Categories</strong>
+        <i class="fa fa-times" id="closeCategorySidebar"></i>
+    </div>
+    <div class="menu">
+        <% nestedCategories.forEach(cat=> { %>
+            <a href="/products?category=<%= cat._id %>">
+                <%= cat.name %>
+            </a>
+            <% if (cat.subcategories && cat.subcategories.length> 0) { %>
+                <% cat.subcategories.forEach(sub=> { %>
+                    <a href="/products?category=<%= sub._id %>" style="padding-left: 20px;">- <%= sub.name %></a>
+                    <% }) %>
+                        <% } %>
+                            <% }) %>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ayoob Bakery Australia — All Categories</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <%- include('partials/sidebar') %>
+        <%- include('partials/category-sidebar') %>
+            <%- include('partials/header') %>
+
+                <main class="container all-categories-page">
+                    <header class="page-header">
+                        <h1>Explore Our Categories</h1>
+                        <p>From crusty breads to delicate pastries and celebratory cakes, discover all the deliciousness
+                            we have to offer.</p>
+                    </header>
+
+                    <div class="category-grid">
+                        <% nestedCategories.forEach(cat=> { %>
+                            <a href="/products?category=<%= cat._id %>" class="category-card fade-in">
+                                <div class="category-card-image">
+                                    <img src="<%= cat.image || 'https://placehold.co/300x250?text=Category+Image' %>"
+                                        alt="<%= cat.name %>">
+                                </div>
+                                <div class="category-card-info">
+                                    <h3>
+                                        <%= cat.name %>
+                                    </h3>
+                                    <p>
+                                        <%= cat.description || 'Explore our selection in this category.' %>
+                                    </p>
+                                    <span class="shop-now-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                                </div>
+                            </a>
+                            <% cat.subcategories.forEach(sub=> { %>
+                                <a href="/products?category=<%= sub._id %>" class="category-card fade-in">
+                                    <div class="category-card-image">
+                                        <img src="<%= sub.image || 'https://placehold.co/300x250?text=Category+Image' %>"
+                                            alt="<%= sub.name %>">
+                                    </div>
+                                    <div class="category-card-info">
+                                        <h3>
+                                            <%= sub.name %>
+                                        </h3>
+                                        <p>
+                                            <%= sub.description || 'Explore our selection in this subcategory.' %>
+                                        </p>
+                                        <span class="shop-now-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                                    </div>
+                                </a>
+                                <% }) %>
+                                    <% }) %>
+                                        <% if (nestedCategories.length===0) { %>
+                                            <p class="no-categories-message">No categories available yet.</p>
+                                            <% } %>
+                    </div>
+                </main>
+
+                <%- include('partials/footer') %>
+
+                    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+                    <script src="/js/scripts.js"></script>
+                    <script>
+                        // Fade-in animation
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const fadeElems = document.querySelectorAll('.fade-in');
+                            const observerOptions = { threshold: 0.1 };
+                            const observer = new IntersectionObserver((entries, observer) => {
+                                entries.forEach(entry => {
+                                    if (entry.isIntersecting) {
+                                        entry.target.classList.add('visible');
+                                        observer.unobserve(entry.target);
+                                    }
+                                });
+                            }, observerOptions);
+                            fadeElems.forEach(elem => observer.observe(elem));
+                        });
+                    </script>
+</body>
+
+</html>

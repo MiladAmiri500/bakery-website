@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Potato Chips",
+    "price": 3.49,
+    "image": "https://images.unsplash.com/photo-1585238342028-4c4b4f0f04c9"
+  },
+  {
+    "name": "Fruit Juice",
+    "price": 2.99,
+    "image": "https://images.unsplash.com/photo-1580910051071-7e0347f92dfc"
+  },
+  {
+    "name": "Red Apples",
+    "price": 1.5,
+    "image": "https://images.unsplash.com/photo-1603048297172-4c3c54e74509"
+  },
+  {
+    "name": "Organic Carrots",
+    "price": 0.99,
+    "image": "https://images.unsplash.com/photo-1589927986089-35812388d1a6"
+  },
+  {
+    "name": "hh",
+    "price": 123,
+    "image": "https://unsplash.com/photos/two-people-on-a-sandy-beach-near-the-ocean-BnrzAamUdeU"
+  }
+]

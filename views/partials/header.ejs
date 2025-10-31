@@ -1,0 +1,27 @@
+<header class="site-header">
+    <div class="header-inner">
+        <div style="display:flex;align-items:center;gap:12px">
+            <div class="hamburger" id="openMenu"><i class="fa fa-bars"></i></div>
+            <div class="logo">
+                <img src="/images/logo.jpg" alt="Ayoob Bakery Australia Logo">
+                <div>Ayoob Bakery Australia</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="icon-btn" id="searchIcon"><i class="fa fa-search"></i></div>
+            <a href="/profile?tab=wishlist" class="icon-btn"><i class="fa fa-heart"></i></a>
+            <a href="<%= user ? '/profile' : '/login' %>" class="icon-btn"><i class="fa fa-user"></i></a>
+            <a href="/profile?tab=cart" class="icon-btn"><i class="fa fa-shopping-cart"></i></a>
+        </div>
+    </div>
+</header>
+
+<!-- Search Row (Global, Hidden by Default) -->
+<div class="search-row hidden" id="searchRow"
+    style="transition: opacity 0.3s ease, max-height 0.3s ease; max-height: 0; overflow: hidden; opacity: 0;">
+    <div class="categories-toggle" id="openCategories"><i class="fa fa-list"></i> All Categories</div>
+    <div class="search-bar">
+        <input class="search-input" id="searchInput" placeholder="Search for products..." />
+        <button class="search-btn" id="searchBtn">Search</button>
+    </div>
+</div>

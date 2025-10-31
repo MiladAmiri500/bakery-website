@@ -1,0 +1,22 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Organic Milk",
+            "price": 2.49,
+            "image": "https://images.unsplash.com/photo-1590080875831-cf3b6b6dc41a"
+        },
+        {
+            "id": 2,
+            "name": "Fresh Bananas",
+            "price": 1.20,
+            "image": "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce"
+        },
+        {
+            "id": 3,
+            "name": "Potato Chips",
+            "price": 3.49,
+            "image": "https://images.unsplash.com/photo-1585238342028-4c4b4f0f04c9"
+        }
+    ]
+}

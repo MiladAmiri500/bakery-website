@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Healthy Breakfast Ideas",
+    "content": "Start your day with energy and vitamins. Try oatmeal with fresh fruits or smoothies packed with greens.",
+    "image": "https://images.unsplash.com/photo-1510626176961-4b57d4fbad03",
+    "date": "2023-10-01"
+  },
+  {
+    "title": "Organic vs Non-Organic",
+    "content": "Why organic matters for your family. Organic produce has fewer pesticides and higher nutrient levels.",
+    "image": "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+    "date": "2023-10-05"
+  },
+  {
+    "title": "Top 10 Snacks",
+    "content": "Delicious yet healthy snack picks. From nuts to yogurt parfaits, keep your energy up without the guilt.",
+    "image": "https://images.unsplash.com/photo-1612197597330-9a985cf00b5f",
+    "date": "2023-10-10"
+  },
+  {
+    "title": "Summer Recipes",
+    "content": "Light and fresh ideas for hot days. Salads, grilled veggies, and fruit-based desserts to beat the heat.",
+    "image": "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578",
+    "date": "2023-10-15"
+  }
+]

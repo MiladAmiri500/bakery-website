@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FreshCart — Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body style="display:flex; align-items:center; justify-content:center; height:100vh; background:var(--muted);">
+    <div
+        style="background:#fff; padding:40px; border-radius:var(--radius); box-shadow:0 8px 24px rgba(0,0,0,0.1); width:450px; max-width:90%;">
+        <h2 style="text-align:center; margin-bottom:30px; font-weight:700; color:var(--dark);">Welcome Back</h2>
+        <% if (error) { %>
+            <p style="color:var(--accent); text-align:center; margin-bottom:20px; font-size:14px;">
+                <%= error %>
+            </p>
+            <% } %>
+                <form action="/login" method="POST">
+                    <label style="display:block; margin-bottom:8px; font-size:14px; color:#555;">Email</label>
+                    <input type="email" name="email" placeholder="Enter your email" required
+                        style="width:100%; padding:14px; margin-bottom:20px; border:1px solid var(--card-border); border-radius:10px; font-size:16px;">
+                    <label style="display:block; margin-bottom:8px; font-size:14px; color:#555;">Password</label>
+                    <input type="password" name="password" placeholder="Enter your password" required
+                        style="width:100%; padding:14px; margin-bottom:20px; border:1px solid var(--card-border); border-radius:10px; font-size:16px;">
+                    <button type="submit" class="btn"
+                        style="width:100%; padding:14px; font-size:16px; margin-bottom:20px;">Login</button>
+                </form>
+                <p style="text-align:center; margin:15px 0; color:#777; font-size:14px;">Or</p>
+                <a href="/auth/google"
+                    style="display:block; text-align:center; padding:14px; border:1px solid var(--card-border); border-radius:10px; text-decoration:none; color:var(--dark); font-size:16px; margin-bottom:20px;">
+                    <i class="fab fa-google" style="margin-right:10px; color:#4285F4;"></i> Login with Google
+                </a>
+                <p style="text-align:center; font-size:14px; color:#777;">Don't have an account? <a href="/signup"
+                        style="color:var(--primary); text-decoration:none;">Sign Up</a></p>
+                <p style="text-align:center; font-size:14px; color:#777; margin-top:10px;">Admin? <a href="/admin/login"
+                        style="color:var(--primary); text-decoration:none;">Admin Login</a></p>
+    </div>
+</body>
+
+</html>

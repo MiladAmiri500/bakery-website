@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>FreshCart — Register</title>
+    <!-- Same links as login -->
+</head>
+
+<body>
+    <%- include('partials/sidebar') %>
+        <%- include('partials/category-sidebar') %>
+            <%- include('partials/header') %>
+
+
+                <section class="section">
+                    <h3>Register</h3>
+                    <form action="/register" method="POST" style="text-align: center;">
+                        <input type="text" name="username" placeholder="Username" required
+                            style="padding: 10px; margin: 10px; border-radius: 8px; border: 1px solid var(--card-border);"><br>
+                        <input type="password" name="password" placeholder="Password" required
+                            style="padding: 10px; margin: 10px; border-radius: 8px; border: 1px solid var(--card-border);"><br>
+                        <button type="submit" class="add-btn">Register</button>
+                    </form>
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </section>
+
+                <%- include('partials/footer') %>
+                    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+                    <script src="/js/scripts.js"></script>
+</body>
+
+</html>

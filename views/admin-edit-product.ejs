@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>FreshCart — Edit Product</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <%- include('partials/sidebar') %>
+        <%- include('partials/category-sidebar') %>
+            <%- include('partials/header') %>
+                <section class="section">
+                    <h3>Edit Product</h3>
+                    <form action="/admin/update/<%= product._id %>" method="POST" style="margin-bottom: 20px;">
+                        <input type="text" name="name" placeholder="Product Name" value="<%= product.name %>" required
+                            style="padding: 10px; margin-right: 10px; border-radius: 8px; border: 1px solid var(--card-border);">
+                        <select name="category" required
+                            style="padding: 10px; margin-right: 10px; border-radius: 8px; border: 1px solid var(--card-border);">
+                            <% leafCategories.forEach(cat=> { %>
+                                <option value="<%= cat._id %>" <%=product.category &&
+                                    product.category.toString()===cat._id.toString() ? 'selected' : '' %> ><%= cat.name
+                                        %>
+                                </option>
+                                <% }) %>
+                        </select>
+                        <input type="number" name="price" placeholder="Price" step="0.01" value="<%= product.price %>"
+                            required
+                            style="padding: 10px; margin-right: 10px; border-radius: 8px; border: 1px solid var(--card-border);">
+                        <input type="text" name="images" placeholder="Image URLs (comma-separated)"
+                            value="<%= product.images.join(', ') %>" required
+                            style="padding: 10px; margin-right: 10px; border-radius: 8px; border: 1px solid var(--card-border); width: 400px;">
+                        <textarea name="description" placeholder="Product Description" required
+                            style="padding: 10px; margin-right: 10px; border-radius: 8px; border: 1px solid var(--card-border); width: 400px; height: 150px;"><%= product.description %></textarea>
+                        <input type="text" name="features" placeholder="Features (comma-separated)"
+                            value="<%= product.features.join(', ') %>" required
+                            style="padding: 10px; margin-right: 10px; border-radius: 8px; border: 1px solid var(--card-border); width: 400px;">
+                        <select name="unit" required
+                            style="padding: 10px; margin-right: 10px; border-radius: 8px; border: 1px solid var(--card-border);">
+                            <option value="kg" <%=product.unit==='kg' ? 'selected' : '' %>>per kg</option>
+                            <option value="lb" <%=product.unit==='lb' ? 'selected' : '' %>>per lb</option>
+                            <option value="quantity" <%=product.unit==='quantity' ? 'selected' : '' %>>per quantity
+                            </option>
+                        </select>
+                        <button type="submit" class="add-btn">Update Product</button>
+                    </form>
+                    <a href="/admin" class="btn">Back to Admin</a>
+                </section>
+                <%- include('partials/footer') %>
+</body>
+
+</html>
