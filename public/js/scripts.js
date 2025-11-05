@@ -370,10 +370,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Quantity Stepper (Merged current + 2; updated version from current) ---
-    const minusBtns = document.querySelectorAll('.minus, .qty-minus, .qty-btn-minus');
-    const plusBtns = document.querySelectorAll('.plus, .qty-plus, .qty-btn-plus');
-    minusBtns.forEach(btn => {
+    // --- Quantity Stepper (Consolidated/FIXED: Unified logic, correct classes, manual edit support, full disable/re-enable) ---
+    document.querySelectorAll('.quantity-selector').forEach(stepper => {
+        const input = stepper.querySelector('.qty-input');
+        const minusBtn = stepper.querySelector('.qty-btn-minus');
+        const plusBtn = stepper.querySelector('.qty-btn-plus');
+
+        if (!input || !minusBtn || !plusBtn) return;  // Skip if incomplete
+
+        // Initial state
+        function updateButtons() {
+            const val = parseInt(input.value) || 1;
+            minusBtn.disabled = val <= 1;
+            input.value = Math.max(1, val);  // Enforce min=1
+        }
+        updateButtons();  // Set initial disabled
+
+        // Plus click
+        plusBtn.addEventListener('click', () => {
+            let val = parseInt(input.value) || 1;
+            input.value = val + 1;
+            updateButtons();  // Re-enable minus
+        });
+
+        // Minus click
+        minusBtn.addEventListener('click', () => {
+            let val = parseInt(input.value) || 1;
+            if (val > 1) {
+                input.value = val - 1;
+                updateButtons();
+            }
+        });
+
+        // Manual input support (FIXED: Listen for changes, enforce min, update buttons)
+        input.addEventListener('input', (e) => {
+            let val = parseInt(e.target.value) || 1;
+            if (val < 1) val = 1;  // Enforce min
+            e.target.value = val;
+            updateButtons();
+        });
+
+        // Prevent non-number input (bonus for UX)
+        input.addEventListener('keydown', (e) => {
+            if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === '.') {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // Fallback for non-selector steppers (e.g., detail page; keep general but deprioritize)
+    const generalMinusBtns = document.querySelectorAll('.minus, .qty-minus, .qty-btn-minus:not(.quantity-selector *)');
+    const generalPlusBtns = document.querySelectorAll('.plus, .qty-plus, .qty-btn-plus:not(.quantity-selector *)');
+    generalMinusBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const input = btn.nextElementSibling || btn.parentElement.querySelector('.qty-input');
             if (input) {
@@ -386,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    plusBtns.forEach(btn => {
+    generalPlusBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const input = btn.previousElementSibling || btn.parentElement.querySelector('.qty-input');
             if (input) {
@@ -399,59 +447,80 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Detailed quantity selector (from 2, if .quantity-selector exists)
-    document.querySelectorAll('.quantity-selector').forEach(stepper => {
-        const input = stepper.querySelector('#quantity, .qty-input');
-        const increaseBtn = stepper.querySelector('.qty-plus');
-        const decreaseBtn = stepper.querySelector('.qty-minus');
-
-        if (increaseBtn) {
-            increaseBtn.addEventListener('click', () => {
-                let currentValue = parseInt(input.value);
-                input.value = currentValue + 1;
-            });
-        }
-
-        if (decreaseBtn) {
-            decreaseBtn.addEventListener('click', () => {
-                let currentValue = parseInt(input.value);
-                if (currentValue > 1) {
-                    input.value = currentValue - 1;
-                }
-            });
-        }
-    });
-
-    // --- Product Card Favorite (Current preserved) ---
+    // --- AJAX Add to Wishlist (Replaces local toggle for server sync with auth/guest support) ---
     document.querySelectorAll('.btn-favorite').forEach(button => {
-        button.addEventListener('click', (e) => {
+        button.addEventListener('click', async (e) => {
             e.preventDefault();
-            button.classList.toggle('active');
-            const icon = button.querySelector('i');
-            if (button.classList.contains('active')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-            } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
+            const card = button.closest('.product-card');
+            const productId = card.dataset.productId;
+            if (!productId) return;
+            try {
+                const response = await fetch(`/wishlist/add/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: ''
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    button.classList.toggle('active', data.added);
+                    const icon = button.querySelector('i');
+                    icon.className = data.added ? 'fas fa-heart' : 'far fa-heart';
+                } else {
+                    alert('Error updating wishlist');
+                }
+            } catch (err) {
+                console.error('Wishlist error:', err);
+                alert('Error updating wishlist');
             }
         });
     });
 
-    // --- Add to Cart (Current preserved + merged from 2) ---
-    document.querySelectorAll('.btn-add-cart').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const form = button.closest('form');
-            const card = button.closest('.product-card');
-            const qtyInput = card ? card.querySelector('#quantity, .qty-input') : document.querySelector('#quantity');
-            if (qtyInput) {
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'quantity';
-                hiddenInput.value = qtyInput.value;
-                form.appendChild(hiddenInput);
+    // --- AJAX Add to Cart (Fixed: Added X-Requested-With header for server AJAX detection) ---
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const card = form.closest('.product-card');
+            const productId = card.dataset.productId;
+            const quantityInput = card.querySelector('.qty-input');
+            const quantity = parseFloat(quantityInput.value) || 1; // Use parseFloat for weight units
+            try {
+                const response = await fetch(`/cart/add/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest' // FIXED: This enables JSON response from server
+                    },
+                    body: `quantity=${quantity}`
+                });
+
+                // DEBUG: Remove after testing
+                console.log('Add to cart response status:', response.status);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Server error response:', errorText);
+                }
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Add to cart success:', data); // DEBUG: Remove after testing
+
+                    // Update UI: Hide quantity selector + form, show "Added to Cart" button
+                    const actions = card.querySelector('.product-card-actions');
+                    actions.innerHTML = `<button class="btn-add-cart added" onclick="location.href='/profile?tab=cart'">Added to Cart</button>`;
+
+                    // Optional: If you want to update cart count in header (add a #cart-count element)
+                    // const cartBadge = document.querySelector('#cart-count');
+                    // if (cartBadge) cartBadge.textContent = data.cartCount;
+
+                } else {
+                    alert('Error adding to cart');
+                }
+            } catch (err) {
+                console.error('Add to cart network/JSON error:', err);
+                alert('Error adding to cart');
             }
-            form.submit();
         });
     });
 
@@ -521,6 +590,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 return dir === 'asc' ? valA > valB ? 1 : -1 : valA < valB ? 1 : -1;
             });
             rows.forEach(row => tbody.appendChild(row));
+        });
+    });
+
+    // Toggle quantity edit in cart view
+    document.querySelectorAll('.quantity-display').forEach(display => {
+        display.addEventListener('click', () => {
+            const form = display.nextElementSibling; // The hidden .quantity-edit-form
+            if (form.style.display === 'none') {
+                display.style.display = 'none';
+                form.style.display = 'flex';
+            }
+        });
+    });
+
+    // Cancel edit in cart
+    document.querySelectorAll('.btn-cancel-edit').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const form = btn.closest('.quantity-edit-form');
+            const display = form.previousElementSibling;
+            form.style.display = 'none';
+            display.style.display = 'block';
         });
     });
 });

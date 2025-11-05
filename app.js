@@ -4,7 +4,7 @@ const Product = require('./models/product');
 const Blog = require('./models/blog');
 const Category = require('./models/category');
 const express = require('express');
-const path = require('path'); // Built-in Node.js module for file reading/writing
+const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
@@ -15,17 +15,13 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 const port = process.env.PORT || 3000;
-
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
 // Serve static files from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
-
 // Parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(session({
     secret: process.env.SESSION_SECRET || 'freshcart-secret',
     resave: false,
@@ -33,15 +29,15 @@ app.use(session({
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
     sameSite: 'lax'
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use((req, res, next) => {
-    res.locals.user = req.user || null;  // Passport sets req.user
+    res.locals.user = req.user || null;
+    // Initialize session cart/wishlist if not present
+    if (!req.session.cart) req.session.cart = [];
+    if (!req.session.wishlist) req.session.wishlist = [];
     next();
 });
-
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser(async (id, done) => {
     try {
@@ -51,7 +47,6 @@ passport.deserializeUser(async (id, done) => {
         done(err, null);
     }
 });
-
 // Local strategy
 passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -66,7 +61,6 @@ passport.use(new LocalStrategy({
         done(err);
     }
 }));
-
 // Google strategy
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -90,13 +84,9 @@ passport.use(new GoogleStrategy({
         done(err);
     }
 }));
-
-
-
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://Milad:122122122Aa@cluster0.h6l6hvs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB error:', err));
-
 // Middleware for user auth
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -105,13 +95,11 @@ function ensureAuthenticated(req, res, next) {
     req.session.returnTo = req.originalUrl;
     res.redirect('/login');
 }
-
 // Middleware for admin auth
 function isAdminAuthenticated(req, res, next) {
     if (req.user && req.user.role === 'admin') return next();
     res.redirect('/admin/login');
 }
-
 // Middleware to add nestedCategories
 async function addNestedCategories(req, res, next) {
     const topCategories = await Category.find({ parent: null });
@@ -121,30 +109,46 @@ async function addNestedCategories(req, res, next) {
     }));
     next();
 }
-
 // Login page
 app.get('/login', (req, res) => {
     res.render('login', { error: req.session.error });
     delete req.session.error;
 });
-
 app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
     failureMessage: true
-}), (req, res) => {
-    req.session.cart = req.user.cart || [];
-    req.session.wishlist = req.user.wishlist || [];
+}), async (req, res) => {
+    // Merge session cart/wishlist to user on login
+    if (req.session.cart && req.session.cart.length > 0) {
+        req.session.cart.forEach(sessionItem => {
+            const existing = req.user.cart.find(uItem => uItem.productId.toString() === sessionItem.productId);
+            if (existing) {
+                existing.quantity += sessionItem.quantity;
+            } else {
+                req.user.cart.push({ productId: new mongoose.Types.ObjectId(sessionItem.productId), quantity: sessionItem.quantity });
+            }
+        });
+        delete req.session.cart;
+    }
+    if (req.session.wishlist && req.session.wishlist.length > 0) {
+        req.session.wishlist.forEach(id => {
+            const objId = new mongoose.Types.ObjectId(id);
+            if (!req.user.wishlist.some(wId => wId.toString() === id)) {
+                req.user.wishlist.push(objId);
+            }
+        });
+        delete req.session.wishlist;
+    }
+    await req.user.save();
     const redirectTo = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectTo);
 });
-
 // Signup page
 app.get('/signup', (req, res) => {
     res.render('signup', { error: req.session.error });
     delete req.session.error;
 });
-
 app.post('/signup', async (req, res) => {
     const { email, password, confirmPassword } = req.body;
     if (password !== confirmPassword) {
@@ -159,12 +163,26 @@ app.post('/signup', async (req, res) => {
         }
         const newUser = new User({ email, password, role: 'user' });
         await newUser.save();
-        req.login(newUser, (err) => {
+        req.login(newUser, async (err) => {
             if (err) {
                 req.session.error = 'Error during login after signup';
                 return res.redirect('/signup');
             }
-            res.redirect('/');  // Redirect to home after signup
+            // Merge session to new user
+            if (req.session.cart && req.session.cart.length > 0) {
+                req.session.cart.forEach(sessionItem => {
+                    newUser.cart.push({ productId: new mongoose.Types.ObjectId(sessionItem.productId), quantity: sessionItem.quantity });
+                });
+                delete req.session.cart;
+            }
+            if (req.session.wishlist && req.session.wishlist.length > 0) {
+                req.session.wishlist.forEach(id => {
+                    newUser.wishlist.push(new mongoose.Types.ObjectId(id));
+                });
+                delete req.session.wishlist;
+            }
+            await newUser.save();
+            res.redirect('/'); // Redirect to home after signup
         });
     } catch (err) {
         console.error('Signup error:', err);
@@ -172,26 +190,42 @@ app.post('/signup', async (req, res) => {
         res.redirect('/signup');
     }
 });
-
 // Google auth
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
 app.get('/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/login'
-}), (req, res) => {
-    req.session.cart = req.user.cart || [];
-    req.session.wishlist = req.user.wishlist || [];
+}), async (req, res) => {
+    // Merge session to user
+    if (req.session.cart && req.session.cart.length > 0) {
+        req.session.cart.forEach(sessionItem => {
+            const existing = req.user.cart.find(uItem => uItem.productId.toString() === sessionItem.productId);
+            if (existing) {
+                existing.quantity += sessionItem.quantity;
+            } else {
+                req.user.cart.push({ productId: new mongoose.Types.ObjectId(sessionItem.productId), quantity: sessionItem.quantity });
+            }
+        });
+        delete req.session.cart;
+    }
+    if (req.session.wishlist && req.session.wishlist.length > 0) {
+        req.session.wishlist.forEach(id => {
+            const objId = new mongoose.Types.ObjectId(id);
+            if (!req.user.wishlist.some(wId => wId.toString() === id)) {
+                req.user.wishlist.push(objId);
+            }
+        });
+        delete req.session.wishlist;
+    }
+    await req.user.save();
     const redirectTo = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectTo);
 });
-
 // Admin login
 app.get('/admin/login', (req, res) => {
     res.render('admin-login', { error: req.session.error });
     delete req.session.error;
 });
-
 app.post('/admin/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -213,7 +247,6 @@ app.post('/admin/login', async (req, res) => {
         res.redirect('/admin/login');
     }
 });
-
 // Logout
 app.get('/logout', (req, res, next) => {
     req.logout((err) => {
@@ -222,73 +255,190 @@ app.get('/logout', (req, res, next) => {
         res.redirect('/');
     });
 });
-
-// Add to wishlist
-app.post('/wishlist/add/:productId', ensureAuthenticated, async (req, res) => {
-    const user = req.user;
+// Add to wishlist (handle auth and guest)
+app.post('/wishlist/add/:productId', async (req, res) => {
     const productId = req.params.productId;
-    const productIdObj = new mongoose.Types.ObjectId(productId);
-    const index = user.wishlist.findIndex(id => id.toString() === productId);
     let added = false;
-    if (index > -1) {
-        user.wishlist.splice(index, 1);
+    if (req.user) {
+        const user = req.user;
+        const index = user.wishlist.findIndex(id => id.toString() === productId);
+        if (index > -1) {
+            user.wishlist.splice(index, 1);
+        } else {
+            user.wishlist.push(new mongoose.Types.ObjectId(productId));
+            added = true;
+        }
+        await user.save();
     } else {
-        user.wishlist.push(productIdObj);
-        added = true;
+        const index = req.session.wishlist.indexOf(productId);
+        if (index > -1) {
+            req.session.wishlist.splice(index, 1);
+        } else {
+            req.session.wishlist.push(productId);
+            added = true;
+        }
     }
-    await user.save();
-    req.session.wishlist = user.wishlist.map(id => id.toString()); // Strings for session
-
-    // Check if AJAX request
     if (req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        // Return JSON for AJAX (added: true if now in wishlist)
         res.json({ added });
     } else {
-        // Fallback redirect for non-AJAX
-        res.redirect(req.headers.referer || '/profile?tab=wishlist');
+        res.redirect(req.headers.referer || '/wishlist');
     }
 });
-
 // Remove from wishlist
-app.post('/wishlist/remove/:index', ensureAuthenticated, async (req, res) => {
+app.post('/wishlist/remove/:index', async (req, res) => {
     const index = parseInt(req.params.index);
-    req.user.wishlist.splice(index, 1);
-    await req.user.save();
-    req.session.wishlist = req.user.wishlist.map(id => id.toString());
-    res.redirect('/profile?tab=wishlist');
+    if (req.user) {
+        const user = await User.findById(req.user.id);
+        user.wishlist.splice(index, 1);
+        await user.save();
+    } else if (req.session.wishlist) {
+        req.session.wishlist.splice(index, 1);
+    }
+    res.redirect('/wishlist');
 });
-
+// Wishlist page
+app.get('/wishlist', addNestedCategories, async (req, res) => {
+    let wishlistProducts = [];
+    if (req.user) {
+        wishlistProducts = await Product.find({ _id: { $in: req.user.wishlist } });
+    } else if (req.session.wishlist) {
+        wishlistProducts = await Product.find({ _id: { $in: req.session.wishlist.map(id => new mongoose.Types.ObjectId(id)) } });
+    }
+    // Compute isInCart, isWishlisted (true for all here)
+    wishlistProducts = wishlistProducts.map(p => ({
+        ...p.toObject(),
+        isInCart: (req.user ? req.user.cart.some(item => item.productId.toString() === p._id.toString()) : req.session.cart.some(item => item.productId === p._id.toString())) || false,
+        isWishlisted: true
+    }));
+    res.render('wishlist', { wishlist: wishlistProducts });
+});
 // Clear wishlist
-app.get('/wishlist/clear', ensureAuthenticated, async (req, res) => {
-    req.user.wishlist = [];
-    await req.user.save();
-    req.session.wishlist = [];
-    res.redirect('/profile?tab=wishlist');
+app.get('/wishlist/clear', async (req, res) => {
+    if (req.user) {
+        req.user.wishlist = [];
+        await req.user.save();
+    } else {
+        req.session.wishlist = [];
+    }
+    res.redirect('/wishlist');
 });
-
-// Profile
-// In app.js, update the /profile route to filter invalid cart items:
-app.get('/profile', [ensureAuthenticated, addNestedCategories], async (req, res) => {
-    const user = await User.findById(req.user.id).populate('cart.productId wishlist');
-    const validCartItems = user.cart.filter(item => item.productId);  // Filter out null productId
-    const cart = validCartItems.map(item => ({ ...item.productId.toObject(), quantity: item.quantity }));
-    const wishlist = user.wishlist;
-    res.render('profile', { user: req.user, cart, wishlist });
+// Add to cart (handle auth and guest)
+app.post('/cart/add/:productId', async (req, res) => {
+    const quantity = parseFloat(req.body.quantity) || 1;
+    const productId = req.params.productId;
+    const product = await Product.findById(productId);
+    if (product) {
+        if (req.user) {
+            const user = req.user;
+            const existing = user.cart.find(item => item.productId.toString() === productId);
+            if (existing) {
+                existing.quantity += quantity;
+            } else {
+                user.cart.push({ productId: new mongoose.Types.ObjectId(productId), quantity });
+            }
+            await user.save();
+        } else {
+            const existing = req.session.cart.find(item => item.productId === productId);
+            if (existing) {
+                existing.quantity += quantity;
+            } else {
+                req.session.cart.push({ productId, quantity });
+            }
+        }
+        if (req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest') {
+            return res.json({ success: true });
+        }
+    }
+    res.redirect(req.headers.referer || '/cart');
 });
-
-// Route for the homepage (for now, no changes—can pass products if you want featured ones)
+// Cart page
+app.get('/cart', addNestedCategories, async (req, res) => {
+    let cartItems = [];
+    if (req.user) {
+        const populatedUser = await User.findById(req.user.id).populate('cart.productId');
+        cartItems = populatedUser.cart.map(item => ({ ...item.productId.toObject(), quantity: item.quantity }));
+    } else if (req.session.cart) {
+        const productIds = req.session.cart.map(item => new mongoose.Types.ObjectId(item.productId));
+        const products = await Product.find({ _id: { $in: productIds } });
+        cartItems = req.session.cart.map(sessionItem => {
+            const product = products.find(p => p._id.toString() === sessionItem.productId);
+            return { ...product.toObject(), quantity: sessionItem.quantity };
+        }).filter(item => item); // Filter out any missing products
+    }
+    res.render('cart', { cart: cartItems });
+});
+// Update cart quantity
+app.post('/cart/update/:index', async (req, res) => {
+    const index = parseInt(req.params.index);
+    const quantity = parseFloat(req.body.quantity);
+    if (isNaN(quantity) || quantity <= 0) {
+        return res.redirect('/cart');
+    }
+    if (req.user) {
+        const user = await User.findById(req.user.id);
+        if (user.cart[index]) {
+            user.cart[index].quantity = quantity;
+            await user.save();
+        }
+    } else if (req.session.cart[index]) {
+        req.session.cart[index].quantity = quantity;
+    }
+    res.redirect('/cart');
+});
+// Remove from cart
+app.post('/cart/remove/:index', async (req, res) => {
+    const index = parseInt(req.params.index);
+    if (req.user) {
+        const user = await User.findById(req.user.id);
+        user.cart.splice(index, 1);
+        await user.save();
+    } else if (req.session.cart) {
+        req.session.cart.splice(index, 1);
+    }
+    res.redirect('/cart');
+});
+// Clear cart
+app.get('/cart/clear', async (req, res) => {
+    if (req.user) {
+        req.user.cart = [];
+        await req.user.save();
+    } else {
+        req.session.cart = [];
+    }
+    res.redirect('/cart');
+});
+// Profile (remove cart/wishlist tabs, keep others)
+app.get('/profile', ensureAuthenticated, addNestedCategories, async (req, res) => {
+    const user = await User.findById(req.user.id);
+    res.render('profile', { user });
+});
+// Route for the homepage
 app.get('/', addNestedCategories, async (req, res) => {
-    const bestSelling = await Product.find({}).sort({ salesCount: -1 }).limit(15);  // Auto by sales
-    const featured = await Product.find({}).limit(15);  // Customize query if needed
-    const popular = await Product.find({}).sort({ ratings: -1 }).limit(15);  // By ratings
-    const newArrivals = await Product.find({}).sort({ _id: -1 }).limit(15);  // Newest
+    const bestSelling = await Product.find({}).sort({ salesCount: -1 }).limit(15);
+    const featured = await Product.find({}).limit(15);
+    const popular = await Product.find({}).sort({ ratings: -1 }).limit(15);
+    const newArrivals = await Product.find({}).sort({ _id: -1 }).limit(15);
     const blogs = await Blog.find({}).sort({ date: -1 }).limit(6);
     const heroBanners = await Banner.find({ type: 'hero' });
     const sideBanners = await Banner.find({ type: 'side' });
-    res.render('index', { bestSelling, featured, popular, newArrivals, blogs, heroBanners, sideBanners });
+    const computeFlags = (products) => {
+        return products.map(p => ({
+            ...p.toObject(),
+            isInCart: (req.user ? req.user.cart.some(item => item.productId.toString() === p._id.toString()) : req.session.cart.some(item => item.productId === p._id.toString())) || false,
+            isWishlisted: (req.user ? req.user.wishlist.some(id => id.toString() === p._id.toString()) : req.session.wishlist.includes(p._id.toString())) || false
+        }));
+    };
+    res.render('index', {
+        bestSelling: computeFlags(bestSelling),
+        featured: computeFlags(featured),
+        popular: computeFlags(popular),
+        newArrivals: computeFlags(newArrivals),
+        blogs,
+        heroBanners,
+        sideBanners
+    });
 });
-// Route for products page (now loads from file)
-app.get('/products', async (req, res) => {
+app.get('/products', addNestedCategories, async (req, res) => {
     const categoryId = req.query.category;
     let currentCategory = null;
     let subcategories = [];
@@ -313,27 +463,39 @@ app.get('/products', async (req, res) => {
 
     const maxPrice = products.length > 0 ? (await Product.aggregate([{ $group: { _id: null, max: { $max: "$price" } } }]))[0].max : 100;
 
-    // nestedCategories as before
-    const topCategories = await Category.find({ parent: null });
-    const nestedCategories = await Promise.all(topCategories.map(async (cat) => {
-        const subs = await Category.find({ parent: cat._id });
-        return { ...cat.toObject(), subcategories: subs };
-    }));
+    // Compute flags for products
+    const computeFlags = (products) => {
+        return products.map(p => ({
+            ...p.toObject(),
+            isInCart: (req.user ? req.user.cart.some(item => item.productId.toString() === p._id.toString()) : req.session.cart.some(item => item.productId === p._id.toString())) || false,
+            isWishlisted: (req.user ? req.user.wishlist.some(id => id.toString() === p._id.toString()) : req.session.wishlist.includes(p._id.toString())) || false
+        }));
+    };
+    products = computeFlags(products);
 
-    res.render('products', { currentCategory, subcategories, products, isSubcategoryView, nestedCategories, allCategories, maxPrice });
+    res.render('products', { currentCategory, subcategories, products, isSubcategoryView, allCategories, maxPrice });
 });
-
-// In /product/:id
 app.get('/product/:id', addNestedCategories, async (req, res) => {
-    const product = await Product.findById(req.params.id).populate('category'); // Optional: for description/features
+    const product = await Product.findById(req.params.id).populate('category');
     if (!product) return res.status(404).send('Product not found');
-    const relatedProducts = await Product.find({ category: product.category, _id: { $ne: product._id } }).limit(6);
-    const isWishlisted = req.user ? req.user.wishlist.includes(product._id) : false;
-    const currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
-    res.render('product-detail', { product, relatedProducts, user: req.user, isWishlisted, currentUrl });
-});
+    let relatedProducts = await Product.find({ category: product.category, _id: { $ne: product._id } }).limit(6);
 
-// In app.js, replace the review post route with this (change middleware to ensureAuthenticated):
+    const computeFlags = (products) => {
+        return products.map(p => ({
+            ...p.toObject(),
+            isInCart: (req.user ? req.user.cart.some(item => item.productId.toString() === p._id.toString()) : req.session.cart.some(item => item.productId === p._id.toString())) || false,
+            isWishlisted: (req.user ? req.user.wishlist.some(id => id.toString() === p._id.toString()) : req.session.wishlist.includes(p._id.toString())) || false
+        }));
+    };
+
+    const isInCart = (req.user ? req.user.cart.some(item => item.productId.toString() === product._id.toString()) : req.session.cart.some(item => item.productId === product._id.toString())) || false;
+    const isWishlisted = (req.user ? req.user.wishlist.some(id => id.toString() === product._id.toString()) : req.session.wishlist.includes(product._id.toString())) || false;
+    relatedProducts = computeFlags(relatedProducts);
+
+    const currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+    res.render('product-detail', { product, relatedProducts, user: req.user, isWishlisted, isInCart, currentUrl });
+});
+// Review post
 app.post('/product/:id/review', ensureAuthenticated, async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
@@ -355,28 +517,14 @@ app.post('/product/:id/review', ensureAuthenticated, async (req, res) => {
     }
     res.redirect(`/product/${req.params.id}#reviews`);
 });
-
-app.get('/about', async (req, res) => {
-    // Compute nestedCategories for sidebar (if not using middleware)
-    const topCategories = await Category.find({ parent: null });
-    const nestedCategories = await Promise.all(topCategories.map(async (cat) => {
-        const subs = await Category.find({ parent: cat._id });
-        return { ...cat.toObject(), subcategories: subs };
-    }));
-
-    res.render('about', { user: req.user, nestedCategories }); // Pass any needed vars, e.g., user for header
+app.get('/about', addNestedCategories, async (req, res) => {
+    res.render('about', { user: req.user });
 });
-
 app.get('/contact', addNestedCategories, (req, res) => {
     res.render('contact', { user: req.user });
 });
-
-// Route for admin page (shows list and add form for both products and blogs)
-// Middleware for admin authentication
-
-
 // Full admin route
-app.get('/admin', isAdminAuthenticated, async (req, res) => {
+app.get('/admin', [isAdminAuthenticated, addNestedCategories], async (req, res) => {
     try {
         const products = await Product.find({});
         const blogs = await Blog.find({}).sort({ date: -1 });
@@ -389,20 +537,12 @@ app.get('/admin', isAdminAuthenticated, async (req, res) => {
             { $match: { 'children.0': { $exists: false } } } // No children
         ]).exec();
 
-        // Compute nestedCategories for sidebar
-        const topCategories = await Category.find({ parent: null });
-        const nestedCategories = await Promise.all(topCategories.map(async (cat) => {
-            const subs = await Category.find({ parent: cat._id });
-            return { ...cat.toObject(), subcategories: subs };
-        }));
-
-        res.render('admin', { products, blogs, banners, categories, leafCategories, nestedCategories });
+        res.render('admin', { products, blogs, banners, categories, leafCategories });
     } catch (error) {
         console.error('Error fetching admin data:', error);
         res.status(500).send('Internal Server Error');
     }
 });
-
 // Route to handle adding a product (form submit)
 app.post('/admin/add', isAdminAuthenticated, async (req, res) => {
     const { name, price, images, category, description, features, unit } = req.body;
@@ -412,34 +552,6 @@ app.post('/admin/add', isAdminAuthenticated, async (req, res) => {
     await newProduct.save();
     res.redirect('/admin');
 });
-
-app.get('/admin/delete-category/:id', isAdminAuthenticated, async (req, res) => {
-    // Optional: Check if has products or subs before delete
-    await Category.findByIdAndDelete(req.params.id);
-    res.redirect('/admin');
-});
-
-
-
-app.get('/admin/edit/:id', isAdminAuthenticated, async (req, res) => {
-    const product = await Product.findById(req.params.id);
-    res.render('admin-edit-product', { product });  // New view, but for simplicity, integrate in admin or create
-});
-
-// Route to delete a product (by index for simplicity)
-app.get('/admin/delete/:id', isAdminAuthenticated, async (req, res) => {
-    await Product.findByIdAndDelete(req.params.id);
-    res.redirect('/admin');
-});
-
-app.post('/admin/update/:id', isAdminAuthenticated, async (req, res) => {
-    const { name, price, images, category, description, features, unit } = req.body;
-    const imageArray = images ? images.split(',').map(i => i.trim()) : [];
-    const featureArray = features ? features.split(',').map(f => f.trim()) : [];
-    await Product.findByIdAndUpdate(req.params.id, { name, price: parseFloat(price), images: imageArray, category, description, features: featureArray, unit });
-    res.redirect('/admin');
-});
-
 // Route to add a blog
 app.post('/admin/add-blog', isAdminAuthenticated, async (req, res) => {
     const { title, content, image } = req.body;
@@ -447,20 +559,6 @@ app.post('/admin/add-blog', isAdminAuthenticated, async (req, res) => {
     await newBlog.save();
     res.redirect('/admin');  // Redirect back to admin page
 });
-
-// Route to delete a blog
-app.get('/admin/delete-blog/:id', isAdminAuthenticated, async (req, res) => {
-    await Blog.findByIdAndDelete(req.params.id);
-    res.redirect('/admin');
-});
-
-// Route for blogs page
-app.get('/blogs', addNestedCategories, async (req, res) => {
-    const blogs = await Blog.find({}).sort({ date: -1 });
-    res.render('blogs', { blogs });
-});
-
-
 // Add banner
 app.post('/admin/add-banner', isAdminAuthenticated, async (req, res) => {
     const { type, image, title, text, link } = req.body;
@@ -468,82 +566,32 @@ app.post('/admin/add-banner', isAdminAuthenticated, async (req, res) => {
     await newBanner.save();
     res.redirect('/admin');
 });
-
+// Route to delete a product (by index for simplicity)
+app.get('/admin/delete/:id', isAdminAuthenticated, async (req, res) => {
+    await Product.findByIdAndDelete(req.params.id);
+    res.redirect('/admin');
+});
+// Route to delete a blog
+app.get('/admin/delete-blog/:id', isAdminAuthenticated, async (req, res) => {
+    await Blog.findByIdAndDelete(req.params.id);
+    res.redirect('/admin');
+});
 // Delete banner
 app.get('/admin/delete-banner/:id', isAdminAuthenticated, async (req, res) => {
     await Banner.findByIdAndDelete(req.params.id);
     res.redirect('/admin');
 });
-
-// Add to cart (from product "Add" button)
-app.post('/cart/add/:productId', ensureAuthenticated, async (req, res) => {
-    const quantity = parseInt(req.body.quantity) || 1;
-    const product = await Product.findById(req.params.productId);
-    if (product) {
-        const user = await User.findById(req.user.id);
-        const existing = user.cart.find(item => item.productId.toString() === product._id.toString());
-        if (existing) {
-            existing.quantity += quantity;
-        } else {
-            user.cart.push({ productId: product._id, quantity });
-        }
-        await user.save();
-        req.session.cart = user.cart.map(item => ({
-            productId: item.productId.toString(),
-            quantity: item.quantity,
-            name: product.name,  // Fetch full if needed, but for simplicity
-            price: product.price,
-            image: product.images[0]
-        }));
-    }
-    res.redirect('/profile?tab=cart');
+app.get('/admin/edit/:id', isAdminAuthenticated, async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    res.render('admin-edit-product', { product });  // New view, but for simplicity, integrate in admin or create
 });
-
-
-app.post('/cart/remove/:index', ensureAuthenticated, async (req, res) => {
-    const index = parseInt(req.params.index);
-    if (req.session.cart) req.session.cart.splice(index, 1);
-    const user = await User.findById(req.user.id);
-    user.cart.splice(index, 1);
-    await user.save();
-    res.redirect('/profile?tab=cart');
+app.post('/admin/update/:id', isAdminAuthenticated, async (req, res) => {
+    const { name, price, images, category, description, features, unit } = req.body;
+    const imageArray = images ? images.split(',').map(i => i.trim()) : [];
+    const featureArray = features ? features.split(',').map(f => f.trim()) : [];
+    await Product.findByIdAndUpdate(req.params.id, { name, price: parseFloat(price), images: imageArray, category, description, features: featureArray, unit });
+    res.redirect('/admin');
 });
-
-app.get('/search', addNestedCategories, async (req, res) => {
-    const query = req.query.q ? req.query.q.toLowerCase() : '';
-    const products = await Product.find({ name: { $regex: query, $options: 'i' } });
-    const blogs = await Blog.find({
-        $or: [{ title: { $regex: query, $options: 'i' } }, { content: { $regex: query, $options: 'i' } }]
-    });
-    res.render('search', { query, products, blogs });
-});
-
-// Clear cart (optional)
-app.get('/cart/clear', ensureAuthenticated, async (req, res) => {
-    req.user.cart = [];
-    await req.user.save();
-    req.session.cart = [];
-    res.redirect('/profile?tab=cart');
-});
-
-// In app.js, add this route after the existing cart routes
-
-app.post('/cart/update/:index', ensureAuthenticated, async (req, res) => {
-    const index = parseInt(req.params.index);
-    const quantity = parseFloat(req.body.quantity);
-    if (isNaN(quantity) || quantity <= 0) {
-        // Invalid quantity, redirect without change
-        return res.redirect('/profile?tab=cart');
-    }
-    const user = await User.findById(req.user.id);
-    if (user.cart[index]) {
-        user.cart[index].quantity = quantity;
-        await user.save();
-        // Update session if needed, but since profile repopulates, optional
-    }
-    res.redirect('/profile?tab=cart');
-});
-
 app.post('/admin/add-category', isAdminAuthenticated, async (req, res) => {
     const { name, parent, image, description } = req.body;
     const newCategory = new Category({
@@ -555,23 +603,16 @@ app.post('/admin/add-category', isAdminAuthenticated, async (req, res) => {
     await newCategory.save();
     res.redirect('/admin');
 });
-
 app.get('/admin/delete-category/:id', isAdminAuthenticated, async (req, res) => {
     // Optional: Check if has products or subs before delete
     await Category.findByIdAndDelete(req.params.id);
     res.redirect('/admin');
 });
-
-app.get('/categories', addNestedCategories, async (req, res) => {
-    res.render('categories', { nestedCategories: res.locals.nestedCategories, user: req.user });
-});
-
 app.get('/admin/edit-category/:id', isAdminAuthenticated, async (req, res) => {
     const category = await Category.findById(req.params.id).populate('parent');
     const categories = await Category.find({ _id: { $ne: req.params.id } }); // Exclude self for parent
     res.render('admin-edit-category', { category, categories });
 });
-
 app.post('/admin/update-category/:id', isAdminAuthenticated, async (req, res) => {
     const { name, parent, image, description } = req.body;
     await Category.findByIdAndUpdate(req.params.id, {
@@ -582,7 +623,33 @@ app.post('/admin/update-category/:id', isAdminAuthenticated, async (req, res) =>
     });
     res.redirect('/admin');
 });
+// Route for blogs page
+app.get('/blogs', addNestedCategories, async (req, res) => {
+    const blogs = await Blog.find({}).sort({ date: -1 });
+    res.render('blogs', { blogs });
+});
+app.get('/categories', addNestedCategories, async (req, res) => {
+    res.render('categories', { nestedCategories: res.locals.nestedCategories, user: req.user });
+});
+app.get('/search', addNestedCategories, async (req, res) => {
+    const query = req.query.q ? req.query.q.toLowerCase() : '';
+    let products = await Product.find({ name: { $regex: query, $options: 'i' } });
 
+    // Compute flags for products
+    const computeFlags = (products) => {
+        return products.map(p => ({
+            ...p.toObject(),
+            isInCart: (req.user ? req.user.cart.some(item => item.productId.toString() === p._id.toString()) : req.session.cart.some(item => item.productId === p._id.toString())) || false,
+            isWishlisted: (req.user ? req.user.wishlist.some(id => id.toString() === p._id.toString()) : req.session.wishlist.includes(p._id.toString())) || false
+        }));
+    };
+    products = computeFlags(products);
+
+    const blogs = await Blog.find({
+        $or: [{ title: { $regex: query, $options: 'i' } }, { content: { $regex: query, $options: 'i' } }]
+    });
+    res.render('search', { query, products, blogs });
+});
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

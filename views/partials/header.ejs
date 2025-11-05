@@ -1,3 +1,4 @@
+<!-- views/partials/header.ejs -->
 <header class="site-header">
     <div class="header-inner">
         <div style="display:flex;align-items:center;gap:12px">
@@ -9,9 +10,9 @@
         </div>
         <div class="header-actions">
             <div class="icon-btn" id="searchIcon"><i class="fa fa-search"></i></div>
-            <a href="/profile?tab=wishlist" class="icon-btn"><i class="fa fa-heart"></i></a>
+            <a href="/wishlist" class="icon-btn"><i class="fa fa-heart"></i></a>
             <a href="<%= user ? '/profile' : '/login' %>" class="icon-btn"><i class="fa fa-user"></i></a>
-            <a href="/profile?tab=cart" class="icon-btn"><i class="fa fa-shopping-cart"></i></a>
+            <a href="/cart" class="icon-btn"><i class="fa fa-shopping-cart"></i></a>
         </div>
     </div>
 </header>

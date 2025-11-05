@@ -1,8 +1,9 @@
+<!-- views/wishlist.ejs (updated to use product-card and structure) -->
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>FreshCart — Wishlist</title>
+    <title>Ayoob Bakery Australia — Wishlist</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,38 +14,27 @@
     <%- include('partials/sidebar') %>
         <%- include('partials/category-sidebar') %>
             <%- include('partials/header') %>
-                <section class="section">
-                    <h3>Your Wishlist</h3>
-                    <div class="products-grid active">
-                        <% wishlist.forEach((item, index)=> { %>
-                            <div class="product-card">
-                                <a href="/product/<%= item._id %>">
-                                    <div class="imgwrap"><img src="<%= item.image %>" alt="<%= item.name %>"></div>
-                                    <strong>
-                                        <%= item.name %>
-                                    </strong>
-                                </a>
-                                <div style="color:#ffd700; margin-top:5px;">
-                                    <%= (item.ratings || 0).toFixed(1) %> ★
+
+                <main class="container">
+                    <section class="section">
+                        <h3>Your Wishlist (<%= wishlist.length %> items)</h3>
+                        <% if (wishlist.length===0) { %>
+                            <p>Your wishlist is empty. <a href="/products">Continue shopping</a>.</p>
+                            <% } else { %>
+                                <div class="products-grid active">
+                                    <% wishlist.forEach((item, index)=> { %>
+                                        <%- include('partials/product-card', { product: item, isWishlisted: true,
+                                            quantity: 1 }) %>
+                                            <% }); %>
                                 </div>
-                                <div class="price">$<%= item.price.toFixed(2) %> / <%= item.unit %>
-                                </div>
-                                <div class="pmeta">
-                                    <form action="/cart/add/<%= item._id %>" method="POST"
-                                        style="margin:0; display:inline;">
-                                        <button class="add-btn">Add to Cart</button>
-                                    </form>
-                                    <form action="/wishlist/remove/<%= index %>" method="POST"
-                                        style="margin:0; display:inline;">
-                                        <button class="add-btn" style="background:var(--accent);">Remove</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <% }); %>
-                    </div>
-                    <a href="/wishlist/clear" class="btn">Clear Wishlist</a>
-                </section>
+                                <a href="/wishlist/clear" class="btn"
+                                    style="background: var(--danger-color); color: white;">Clear Wishlist</a>
+                                <% } %>
+                    </section>
+                </main>
+
                 <%- include('partials/footer') %>
+
                     <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
                     <script src="/js/scripts.js"></script>
 </body>

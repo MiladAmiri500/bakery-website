@@ -296,6 +296,8 @@ p,
 
 /* --- Header (Current preserved + minor merges; FIXED for shrink on scroll) --- */
 /* --- Header (FIXED: Sticky shrink with fixed positioning) --- */
+/* --- Header (Current preserved + minor merges; FIXED for shrink on scroll) --- */
+/* --- Header (FIXED: Sticky shrink with fixed positioning) --- */
 .site-header {
     height: 90px;
     /* Base height */
@@ -312,7 +314,8 @@ p,
     z-index: 1003;
     /* Above overlays */
     background: var(--bg-color);
-    overflow: visible;
+    overflow: hidden;
+    /* FIXED: Prevent horizontal overflow globally; change to 'visible' if needed for desktop effects */
 }
 
 .site-header.scrolled {
@@ -345,6 +348,10 @@ p,
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
+    /* FIXED: Ensure no overflow */
+    overflow: hidden;
+    flex-wrap: nowrap;
+    /* FIXED: Prevent unwanted wrapping unless specified */
 }
 
 .hamburger {
@@ -357,6 +364,8 @@ p,
     border: 1px solid var(--card-border);
     cursor: pointer;
     transition: background 0.3s;
+    flex-shrink: 0;
+    /* FIXED: Prevent hamburger from shrinking */
 }
 
 .hamburger:hover {
@@ -370,6 +379,10 @@ p,
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 1;
+    /* FIXED: Allow logo to shrink slightly if needed */
+    min-width: 0;
+    /* FIXED: Enable text truncation if too long */
 }
 
 .logo .mark {
@@ -382,12 +395,18 @@ p,
     align-items: center;
     justify-content: center;
     font-weight: 800;
+    flex-shrink: 0;
+    /* FIXED: Keep mark fixed */
 }
 
+/* --- Header Icons (FIXED: Theme colors - dark brown default, golden hover, no blue links) --- */
 .header-actions {
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
+    /* FIXED: Prevent actions from shrinking too much */
+    min-width: 0;
 }
 
 .icon-btn {
@@ -399,12 +418,65 @@ p,
     justify-content: center;
     border: 1px solid var(--card-border);
     cursor: pointer;
-    transition: background 0.3s, transform 0.3s;
+    transition: background 0.3s, transform 0.3s, color 0.3s;
+    /* FIXED: Add color transition for smooth hover */
+    flex-shrink: 0;
+    /* FIXED: Icons don't shrink */
+    text-decoration: none;
+    /* FIXED: Remove underline if <a> */
+    color: var(--dark) !important;
+    /* FIXED: Force dark brown (overrides blue link default) */
+    font-size: 1.1rem;
+    /* FIXED: Consistent icon size */
 }
 
-.icon-btn:hover {
+.icon-btn:hover,
+.icon-btn:focus {
     background: var(--muted);
+    /* Warm off-white bg */
     transform: scale(1.05);
+    color: var(--accent) !important;
+    /* FIXED: Golden tan on hover for theme pop */
+    text-decoration: none;
+    /* FIXED: No underline on hover */
+}
+
+.icon-btn:active {
+    background: var(--primary);
+    /* Saddle brown bg on click */
+    color: white !important;
+    /* FIXED: White text for contrast */
+    transform: scale(0.98);
+    /* Subtle press effect */
+}
+
+/* Ensure icon elements (e.g., <i>) inherit theme colors */
+.icon-btn i {
+    color: inherit;
+    /* FIXED: Inherit from .icon-btn to avoid blue fallback */
+    transition: color 0.3s;
+    /* Smooth with parent */
+}
+
+/* Mobile-specific icon sizing (already in media query; add color reinforcement) */
+@media (max-width: 767px) {
+    .icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        color: var(--dark) !important;
+        /* FIXED: Reinforce on mobile */
+    }
+
+    .icon-btn i {
+        font-size: 1rem !important;
+        /* FIXED: Slightly smaller icons on mobile */
+    }
+
+    .icon-btn:hover,
+    .icon-btn:focus {
+        color: var(--accent) !important;
+        /* Golden hover on mobile too */
+    }
 }
 
 .logo img {
@@ -414,41 +486,118 @@ p,
     /* Full size default */
     transform: scale(1);
     /* No scale initially */
+    flex-shrink: 0;
+    /* FIXED: Prevent img squash */
 }
 
 /* Mobile adjustment */
+/* Mobile adjustment - FIXED: Dynamic body padding, tighter shrink, no horizontal overflow */
+/* Mobile adjustment - FIXED: Dynamic body padding, tighter shrink, no horizontal overflow, + logo shift right */
+/* Mobile adjustment - FIXED: Dynamic body padding, tighter shrink, no horizontal overflow, + logo shift right (consistent padding on scroll) */
+/* Mobile adjustment - FIXED: Dynamic body padding, tighter shrink, no horizontal overflow, + logo shift right */
 @media (max-width: 767px) {
+    body {
+        padding-top: 70px;
+        /* FIXED: Match mobile base header height (adjusts from 90px) */
+    }
+
     .site-header {
         height: 70px;
         /* Shorter base on mobile */
+        overflow: hidden !important;
+        /* FIXED: Strictly prevent right-scroll revealing icons */
+    }
+
+    .header-inner {
+        padding: 8px 12px 8px 60px !important;
+        /* FIXED: Increased left padding (from 8px/12px) to shift logo right, avoiding hamburger overlap */
+        gap: 8px;
+        /* FIXED: Add small gap between major flex items (hamburger/logo/actions) - but since hamburger is fixed, this gaps logo-actions */
+    }
+
+    .logo {
+        font-size: 20px;
+        /* FIXED: Smaller font for better fit */
+        gap: 6px;
+        /* FIXED: Reduce logo internal gap */
+        margin-left: 0 !important;
+        /* FIXED: Ensure no negative/zero left margin pulls it back */
     }
 
     .logo img {
-        height: 60px;
-        /* Smaller default on mobile */
+        height: 50px;
+        /* FIXED: Smaller default on mobile (from 60px) for quicker shrink feel */
+    }
+
+    .header-actions {
+        gap: 6px;
+        /* FIXED: Tighter icon gaps to reduce total width */
+    }
+
+    .icon-btn {
+        width: 36px !important;
+        /* FIXED: Smaller icons on mobile */
+        height: 36px !important;
     }
 
     .site-header.scrolled {
-        height: 55px !important;
-        /* Tighter on small screens */
+        height: 50px !important;
+        /* FIXED: Even tighter (from 55px) for more noticeable shrink */
     }
 
     .site-header.scrolled .header-inner {
-        padding: 6px 12px !important;
+        padding: 4px 8px 4px 56px !important;
+        /* FIXED: Proportional left padding on scroll (slightly reduced but still buffered for overlap prevention) */
     }
 
     .site-header.scrolled .logo img {
-        height: 45px !important;
-        /* Minimum readable size */
+        height: 40px !important;
+        /* FIXED: More aggressive shrink (from 45px) */
+    }
+
+    .site-header.scrolled .logo {
+        font-size: 18px !important;
+        /* FIXED: Scale down text too */
+    }
+
+    /* FIXED: If still overflowing, allow actions to wrap as last resort */
+    .header-actions {
+        flex-wrap: wrap;
+        /* FIXED: Wrap icons if screen <320px */
+        justify-content: flex-end;
+    }
+
+    /* On scroll, body padding adjusts to prevent content jump */
+    body.scrolled-parent {
+        /* FIXED: Add this class via JS when .scrolled is active */
+        padding-top: 50px !important;
+    }
+
+    /* FIXED: Hamburger positioning - ensure it's fully left and doesn't intrude */
+    .hamburger {
+        left: 10px !important;
+        /* Keep fixed left */
+        z-index: 1002 !important;
+        /* Below header content */
     }
 }
 
+
+
 /* Adjust header inner to compensate (prevent squeeze) */
 .header-inner {
-    padding: 12px 16px;
-    /* Keep original, but add flex tweaks if needed */
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
     align-items: center;
-    /* Center vertically */
+    justify-content: space-between;
+    padding: 12px 16px;
+    /* Base padding */
+    /* FIXED: Ensure no overflow */
+    overflow: hidden;
+    flex-wrap: nowrap;
+    /* FIXED: Prevent unwanted wrapping unless specified */
+    /* FIXED: Mobile override handles left shift; base stays standard */
 }
 
 
@@ -701,6 +850,19 @@ p,
     font-size: 1.6rem;
     cursor: pointer;
     color: var(--light-text-color);
+}
+
+/* FIXED: Bring Sidebar Header Forward (Above Main Header) */
+.global-sidebar {
+    z-index: 1004;
+    /* Higher than main header's 1003; applies to whole sidebar */
+}
+
+.global-sidebar .sidebar-header {
+    z-index: 1005;
+    /* Extra boost for header specifically, if needed for close button/logo */
+    position: relative;
+    /* Ensures it layers within sidebar */
 }
 
 /* Sidebar Content (From current additions) - FIXED: min-height 0, flex for internal stacking */
@@ -2041,6 +2203,7 @@ textarea.form-control {
 }
 
 /* --- Product Card (Current preserved + merged from 5,6,8) --- */
+/* --- Product Card (Current preserved + merged from 5,6,8) --- */
 .product-card {
     /* Merged current + 5,6,8 */
     background: var(--bg-color);
@@ -2265,31 +2428,60 @@ textarea.form-control {
 .quantity-selector,
 .weight-selector {
     /* From current */
-    flex-basis: 90px;
+    flex-basis: 120px;
+    /* Increased from 90px for better coverage */
     flex-grow: 0;
-    min-width: 90px;
+    min-width: 120px;
+    background: var(--muted);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    padding: 8px 12px;
+    /* Increased right padding */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.quantity-selector .qty-btn {
+.quantity-selector .qty-btn,
+.weight-selector .qty-btn {
     /* From current */
     background: none;
     border: none;
-    padding: 8px 12px;
+    padding: 0 10px;
+    /* Adjusted padding for better hitbox */
     cursor: pointer;
     font-size: 1.2rem;
     color: var(--dark);
+    width: auto;
+    /* Remove fixed width */
+    height: auto;
+    /* Remove fixed height */
+    border-radius: 0;
+    /* Remove circle for better alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+.quantity-selector .qty-btn:hover,
+.weight-selector .qty-btn:hover {
+    color: var(--primary);
 }
 
 .weight-selector .qty-input {
     /* From current */
-    width: auto;
-    max-width: 50px;
-    text-align: right;
+    width: 60px;
+    /* Increased for visibility */
+    max-width: none;
+    text-align: center;
+    /* Center for weight */
     border: none;
     font-size: 1rem;
     font-weight: 600;
     color: var(--primary);
-    padding: 8px 5px 8px 15px;
+    padding: 8px 0;
+    background: transparent;
 }
 
 .weight-selector .unit-label {
@@ -2327,6 +2519,17 @@ textarea.form-control {
     background: var(--accent);
     color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-title a {
+    color: var(--dark) !important;
+    text-decoration: none !important;
+}
+
+.product-title a:hover {
+    color: var(--primary) !important;
+    text-decoration: none !important;
+    /* Or 'underline' if subtle hover wanted; keeping none per "current styles" */
 }
 
 /* Mobile adjustments for actions (From current) */
@@ -4133,4 +4336,90 @@ textarea.form-control {
         z-index: 1003 !important;
         /* Above sidebar (1001) and hamburger (1002) */
     }
+}
+
+/* ... (existing styles) */
+
+/* Added to Cart button */
+.btn-add-cart.added {
+    background: var(--success-color);
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+/* Trash icon in cart */
+.trash-icon {
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s;
+}
+
+.trash-icon:hover {
+    color: darkred;
+}
+
+/* Quantity display in cart */
+.quantity-display {
+    cursor: pointer;
+    background: var(--muted);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.quantity-display:hover {
+    background: var(--accent);
+    color: white;
+}
+
+/* Edit form in cart */
+.quantity-edit-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-update-quantity {
+    background: var(--primary);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-cancel-edit {
+    background: var(--muted);
+    color: var(--dark);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Order Now button */
+.btn-order-now {
+    display: block;
+    background: var(--accent);
+    color: var(--dark);
+    padding: 12px;
+    border-radius: 50px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-order-now:hover {
+    background: var(--primary);
+    color: white;
 }

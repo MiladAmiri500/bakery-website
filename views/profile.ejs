@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FreshCart — Profile</title>
+    <title>Ayoob Bakery Australia — Profile</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
@@ -34,10 +34,6 @@
                                                 class="fas fa-user-edit"></i> My Profile</a></li>
                                     <li><a href="#" class="nav-link" data-target="orders-content"><i
                                                 class="fas fa-box"></i> Order History</a></li>
-                                    <li><a href="#" class="nav-link" data-target="wishlist-content"><i
-                                                class="fas fa-heart"></i> My Wishlist</a></li>
-                                    <li><a href="#" class="nav-link" data-target="cart-content"><i
-                                                class="fas fa-shopping-cart"></i> My Cart</a></li>
                                     <li><a href="#" class="nav-link" data-target="addresses-content"><i
                                                 class="fas fa-map-marker-alt"></i> My Addresses</a></li>
                                     <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
@@ -85,48 +81,6 @@
                         <h2>Order History</h2>
                         <p>No orders yet.</p> <!-- Placeholder, as no orders model -->
                                         <!-- If orders added later, populate table -->
-                                </div>
-                            </div>
-
-                            <div id="wishlist-content" class="profile-content">
-                                <div class="content-card">
-                                    <h2>My Wishlist</h2>
-                                    <% if (wishlist.length===0) { %>
-                                        <p>Your wishlist is empty.</p>
-                                        <% } else { %>
-                                            <div class="product-grid">
-                                                <% wishlist.forEach(item=> { %>
-                                                    <%- include('partials/product-card', { product: item, isWishlisted:
-                                                        true, quantity: 1 }) %>
-                                                        <!-- Note: Actions (add to cart/remove) should be handled in partial if needed; adjust as per your partial's logic -->
-                                                        <% }) %>
-                                            </div>
-                                            <% } %>
-                                </div>
-                            </div>
-
-                            <!-- In views/profile.ejs, update the cart-content section -->
-
-                            <div id="cart-content" class="profile-content">
-                                <div class="content-card">
-                                    <h2>My Shopping Cart (<%= cart.length %> items)</h2>
-                                    <% if (cart.length===0) { %>
-                                        <p>Your cart is empty.</p>
-                                        <% } else { %>
-                                            <div class="product-grid">
-                                                <% cart.forEach((item, index)=> { %>
-                                                    <% let product={ ...item, _id: item.productId, ratings: item.ratings
-                                                        || 0, category: { name: 'Cart Item' } }; %>
-                                                        <%- include('partials/cart-product-card', { product,
-                                                            isWishlisted: false, quantity: item.quantity, index }) %>
-                                                            <% }) %>
-                                            </div>
-                                            <div>
-                                                <h3>Total: $<%= cart.reduce((total, item)=> total + (item.price || 0) *
-                                                        item.quantity, 0).toFixed(2) %></h3>
-                                                <a href="/cart" class="btn btn-primary">View Cart</a>
-                                            </div>
-                                            <% } %>
                                 </div>
                             </div>
 

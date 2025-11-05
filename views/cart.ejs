@@ -1,12 +1,12 @@
+<!-- views/cart.ejs (updated to use cart-product-card and structure) -->
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>FreshCart — Cart</title>
+    <title>Ayoob Bakery Australia — Cart</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -17,27 +17,31 @@
         <%- include('partials/category-sidebar') %>
             <%- include('partials/header') %>
 
-
-                <section class="section">
-                    <h3>Your Cart</h3>
-                    <div class="products-grid active">
-                        <% let total=0; %>
-                            <% cart.forEach((item, index)=> { %>
-                                <% let product={ ...item, _id: item.productId, ratings: item.ratings || 0, category: {
-                                    name: 'Cart Item' } }; %>
-                                    <%- include('partials/product-card', { product, isWishlisted: false, quantity:
-                                        item.quantity }) %>
-                                        <!-- Add remove button outside if needed -->
-                                        <form action="/cart/remove/<%= index %>" method="POST" style="margin:0;">
-                                            <button class="add-btn" style="background:var(--accent);">Remove</button>
-                                        </form>
-                                        <% total +=(item.price || 0) * item.quantity; %>
-                                            <% }); %>
-                    </div>
-                    <p>Grand Total: $<%= total.toFixed(2) %>
-                    </p>
-                    <a href="/cart/clear" class="btn">Clear Cart</a>
-                </section>
+                <main class="container">
+                    <section class="section">
+                        <h3>Your Cart (<%= cart.length %> items)</h3>
+                        <% if (cart.length===0) { %>
+                            <p>Your cart is empty. <a href="/products">Continue shopping</a>.</p>
+                            <% } else { %>
+                                <div class="products-grid active">
+                                    <% let total=0; %>
+                                        <% cart.forEach((item, index)=> { %>
+                                            <% let product={ ...item, ratings: item.ratings || 0, category: {
+                                                name: 'Cart Item' } }; %>
+                                                <% total +=(item.price || 0) * item.quantity; %>
+                                                    <%- include('partials/cart-product-card', { product, isWishlisted:
+                                                        false, quantity: item.quantity, index }) %>
+                                                        <% }); %>
+                                </div>
+                                <p>Grand Total: $<%= total.toFixed(2) %>
+                                </p>
+                                <a href="/cart/clear" class="btn"
+                                    style="background: var(--danger-color); color: white;">Clear Cart</a>
+                                <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+                                <!-- Placeholder for checkout -->
+                                <% } %>
+                    </section>
+                </main>
 
                 <%- include('partials/footer') %>
 
