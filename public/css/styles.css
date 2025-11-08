@@ -459,25 +459,7 @@ p,
 }
 
 /* Mobile-specific icon sizing (already in media query; add color reinforcement) */
-@media (max-width: 767px) {
-    .icon-btn {
-        width: 36px !important;
-        height: 36px !important;
-        color: var(--dark) !important;
-        /* FIXED: Reinforce on mobile */
-    }
 
-    .icon-btn i {
-        font-size: 1rem !important;
-        /* FIXED: Slightly smaller icons on mobile */
-    }
-
-    .icon-btn:hover,
-    .icon-btn:focus {
-        color: var(--accent) !important;
-        /* Golden hover on mobile too */
-    }
-}
 
 .logo img {
     transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.4s ease;
@@ -495,92 +477,7 @@ p,
 /* Mobile adjustment - FIXED: Dynamic body padding, tighter shrink, no horizontal overflow, + logo shift right */
 /* Mobile adjustment - FIXED: Dynamic body padding, tighter shrink, no horizontal overflow, + logo shift right (consistent padding on scroll) */
 /* Mobile adjustment - FIXED: Dynamic body padding, tighter shrink, no horizontal overflow, + logo shift right */
-@media (max-width: 767px) {
-    body {
-        padding-top: 70px;
-        /* FIXED: Match mobile base header height (adjusts from 90px) */
-    }
 
-    .site-header {
-        height: 70px;
-        /* Shorter base on mobile */
-        overflow: hidden !important;
-        /* FIXED: Strictly prevent right-scroll revealing icons */
-    }
-
-    .header-inner {
-        padding: 8px 12px 8px 60px !important;
-        /* FIXED: Increased left padding (from 8px/12px) to shift logo right, avoiding hamburger overlap */
-        gap: 8px;
-        /* FIXED: Add small gap between major flex items (hamburger/logo/actions) - but since hamburger is fixed, this gaps logo-actions */
-    }
-
-    .logo {
-        font-size: 20px;
-        /* FIXED: Smaller font for better fit */
-        gap: 6px;
-        /* FIXED: Reduce logo internal gap */
-        margin-left: 0 !important;
-        /* FIXED: Ensure no negative/zero left margin pulls it back */
-    }
-
-    .logo img {
-        height: 50px;
-        /* FIXED: Smaller default on mobile (from 60px) for quicker shrink feel */
-    }
-
-    .header-actions {
-        gap: 6px;
-        /* FIXED: Tighter icon gaps to reduce total width */
-    }
-
-    .icon-btn {
-        width: 36px !important;
-        /* FIXED: Smaller icons on mobile */
-        height: 36px !important;
-    }
-
-    .site-header.scrolled {
-        height: 50px !important;
-        /* FIXED: Even tighter (from 55px) for more noticeable shrink */
-    }
-
-    .site-header.scrolled .header-inner {
-        padding: 4px 8px 4px 56px !important;
-        /* FIXED: Proportional left padding on scroll (slightly reduced but still buffered for overlap prevention) */
-    }
-
-    .site-header.scrolled .logo img {
-        height: 40px !important;
-        /* FIXED: More aggressive shrink (from 45px) */
-    }
-
-    .site-header.scrolled .logo {
-        font-size: 18px !important;
-        /* FIXED: Scale down text too */
-    }
-
-    /* FIXED: If still overflowing, allow actions to wrap as last resort */
-    .header-actions {
-        flex-wrap: wrap;
-        /* FIXED: Wrap icons if screen <320px */
-        justify-content: flex-end;
-    }
-
-    /* On scroll, body padding adjusts to prevent content jump */
-    body.scrolled-parent {
-        /* FIXED: Add this class via JS when .scrolled is active */
-        padding-top: 50px !important;
-    }
-
-    /* FIXED: Hamburger positioning - ensure it's fully left and doesn't intrude */
-    .hamburger {
-        left: 10px !important;
-        /* Keep fixed left */
-        z-index: 1002 !important;
-        /* Below header content */
-    }
-}
 
 
 
@@ -2580,32 +2477,7 @@ textarea.form-control {
 
 /* Mobile adjustments for actions (From current) */
 /* Mobile adjustments for actions (From current) */
-@media (max-width: 400px) {
-    .action-row {
-        flex-wrap: wrap;
-        gap: 8px;
-        /* Add gap for better spacing */
-    }
 
-    .quantity-selector,
-    .weight-selector {
-        flex-basis: auto;
-        /* Allow natural width instead of 100% */
-        min-width: 100px;
-        /* Minimum width to prevent too small */
-        flex-grow: 0;
-        /* Don't grow to fill */
-    }
-
-    .btn-add-cart {
-        flex-basis: auto;
-        /* Allow natural width */
-        flex-grow: 1;
-        /* Grow to fill remaining space */
-        min-width: 120px;
-        /* Ensure button doesn't collapse */
-    }
-}
 
 /* --- Listing Controls Bar --- */
 .listing-controls {
@@ -2992,19 +2864,7 @@ textarea.form-control {
     border-radius: var(--border-radius);
 }
 
-@media (max-width: 992px) {
-    .gallery-grid {
-        grid-template-columns: 1fr !important;
-        /* Switch to single column for safety */
-        grid-auto-rows: auto;
-    }
 
-    .gallery-item {
-        grid-column: 1 / -1 !important;
-        /* Reset all to full width */
-        grid-row: auto !important;
-    }
-}
 
 .gallery-item img {
     /* From 4 */
@@ -3334,37 +3194,7 @@ textarea.form-control {
 }
 
 /* Mobile adjustments for product grid and cards */
-@media (max-width: 768px) {
-    .products-grid {
-        grid-template-columns: 1fr !important;
-        /* Force single column to prevent overlap */
-        gap: 16px !important;
-    }
 
-    .product-card {
-        min-width: auto !important;
-        /* Remove min-width constraint on mobile */
-        width: 100% !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .products-grid {
-        grid-template-columns: 1fr !important;
-        gap: 12px !important;
-        /* Tighter gap on very small screens */
-    }
-
-    .product-card {
-        min-width: auto !important;
-        width: 100% !important;
-    }
-
-    .container {
-        padding: 10px !important;
-        /* Ensure container doesn't squeeze cards */
-    }
-}
 
 .address-grid {
     /* From 7 */
@@ -3396,410 +3226,7 @@ textarea.form-control {
 
 /* --- Responsive Media Queries (Consolidated from all) --- */
 /* Responsive adjustments (add to your media queries section) */
-@media (max-width: 992px) {
-    .profile-container .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
-        gap: 20px !important;
-    }
 
-    /* General (Merged from 1,2,3,4,5,7) */
-    .footer-content {
-        /* From 1 */
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .about-grid {
-        /* From 2 */
-        grid-template-columns: 1fr;
-    }
-
-    .about-grid.reverse-mobile {
-        /* From 2 */
-        grid-auto-flow: dense;
-    }
-
-    .about-grid.reverse-mobile .about-text {
-        /* From 2 */
-        grid-row: 1;
-    }
-
-    .values-grid {
-        /* From 2 */
-        grid-template-columns: 1fr;
-    }
-
-    .process-images {
-        /* From 2 */
-        margin-bottom: 30px;
-    }
-
-    .team-card {
-        /* From 2 */
-        flex-direction: column;
-    }
-
-    .team-image {
-        /* From 2 */
-        flex: 0 0 300px;
-        width: 100%;
-    }
-
-    .contact-grid {
-        /* From 3 */
-        grid-template-columns: 1fr;
-    }
-
-    h1 {
-        /* From 4 */
-        font-size: 3.5rem;
-    }
-
-    h2 {
-        /* From 4 */
-        font-size: 2.5rem;
-    }
-
-    .main-nav {
-        /* From 4 */
-        display: none;
-    }
-
-    .welcome-section {
-        /* From 4 */
-        grid-template-columns: 1fr;
-    }
-
-    .categories-grid {
-        /* From 4 */
-        grid-template-columns: 1fr;
-    }
-
-    .promise-section {
-        /* From 4 */
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-
-    .promise-section .promise-image {
-        /* From 4 */
-        order: -1;
-    }
-
-    .testimonial-grid {
-        /* From 4 */
-        grid-template-columns: 1fr;
-    }
-
-    .gallery-grid {
-        /* From 4 */
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .item-1 {
-        /* From 4 */
-        grid-column: 1 / 3;
-        grid-row: 1;
-    }
-
-    .promo-grid {
-        /* From 4 */
-        grid-template-columns: 1fr;
-    }
-
-    .product-page-container {
-        /* From 5 */
-        grid-template-columns: 1fr;
-    }
-
-    .product-actions {
-        /* From 5 */
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .quantity-selector {
-        /* From 5 */
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 15px;
-    }
-
-    .btn-primary,
-    .btn-wishlist {
-        /* From 5 */
-        width: calc(50% - 10px);
-    }
-
-    .btn-wishlist {
-        /* From 5 */
-        border-radius: 50px;
-        padding: 15px 25px;
-    }
-
-    .profile-container {
-        /* From 7 */
-        grid-template-columns: 1fr;
-    }
-
-    .profile-container .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 24px;
-        /* Increase gap for breathing room */
-    }
-
-    .profile-sidebar {
-        /* From 7 */
-        margin-bottom: 30px;
-    }
-
-    .sidebar-nav ul {
-        /* From 7 */
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    /* Current mobile (Merged) */
-    .hero-wrap {
-        grid-template-columns: 1fr;
-    }
-
-    .swiper {
-        height: 250px;
-    }
-
-    .slide {
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .slide img {
-        width: 100%;
-        max-height: 200px;
-    }
-
-    .side-banners {
-        display: none;
-    }
-
-    .slide h2 {
-        font-size: 24px;
-    }
-
-    .promo-row {
-        grid-template-columns: 1fr;
-    }
-
-    .cats-row {
-        gap: 8px;
-    }
-
-    .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    }
-
-    .detail-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* Product Detail Actions Responsive */
-    .product-detail .product-actions {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .product-detail .quantity-selector {
-        margin-bottom: 15px;
-    }
-
-    .product-detail .product-actions .btn-primary,
-    .product-detail .product-actions .btn-wishlist {
-        width: calc(50% - 10px);
-    }
-
-    .product-detail .product-actions .btn-wishlist {
-        border-radius: 50px;
-        padding: 15px 25px;
-    }
-}
-
-@media (max-width: 768px) {
-    .profile-container .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
-        /* Wider for mobile visibility */
-        gap: 24px !important;
-    }
-
-    .profile-container .product-card {
-        min-height: 380px;
-        /* Slightly shorter for mobile if content reflows */
-    }
-
-    .listing-controls {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .search-bar {
-        flex: 1 1 100%;
-        order: -1;
-        /* Move search to top on mobile */
-    }
-
-    .search-bar input {
-        padding: 14px 16px 14px 45px;
-        /* More vertical space on mobile */
-    }
-
-    /* General (Merged from 1,2,3,4,5,7) */
-    .footer-content {
-        /* From 1 */
-        grid-template-columns: 1fr;
-    }
-
-    h1 {
-        /* From 2,3,4 */
-        font-size: 2.5rem;
-    }
-
-    .hero h1 {
-        /* From 2 */
-        font-size: 3rem;
-    }
-
-    h2 {
-        /* From 2,3,4 */
-        font-size: 2.2rem;
-    }
-
-    .img-small {
-        /* From 2 */
-        width: 60%;
-        bottom: -20px;
-        right: 10px;
-    }
-
-    .cta-section {
-        /* From 2 */
-        background-attachment: scroll;
-    }
-
-    h2 {
-        /* From 3,4 */
-        font-size: 2.2rem;
-    }
-
-    .page-header {
-        /* From 3 */
-        padding: 40px 20px;
-    }
-
-    .hero-image {
-        /* From 3 */
-        height: 300px;
-    }
-
-    h2 {
-        /* From 4 */
-        font-size: 2rem;
-    }
-
-    .section-padding {
-        /* From 4 */
-        padding: 60px 20px;
-    }
-
-    .hero-actions {
-        /* From 4 */
-        flex-direction: column;
-    }
-
-    .product-page-container {
-        /* From 5 */
-        padding: 20px;
-    }
-
-    .product-title {
-        /* From 5 */
-        font-size: 2rem;
-    }
-
-    .product-price {
-        /* From 5 */
-        font-size: 1.8rem;
-    }
-
-    .btn-primary,
-    .btn-wishlist {
-        /* From 5 */
-        width: 100%;
-    }
-
-    .form-row,
-    .address-grid {
-        /* From 7 */
-        grid-template-columns: 1fr;
-    }
-
-    .order-table {
-        /* From 7 */
-        display: block;
-        overflow-x: auto;
-    }
-
-    /* Current mobile (Already included above) */
-
-    /* Product Detail Actions Responsive */
-    .product-detail .product-page-container {
-        padding: 20px;
-    }
-
-    .product-detail .product-title {
-        font-size: 2rem;
-    }
-
-    .product-detail .product-price {
-        font-size: 1.8rem;
-    }
-
-    .product-detail .product-actions .btn-primary,
-    .product-detail .product-actions .btn-wishlist {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .profile-container .product-grid {
-        grid-template-columns: 1fr !important;
-        /* Single column to fully avoid trim/overlap */
-        gap: 20px !important;
-    }
-
-    .search-bar {
-        border-radius: 12px;
-        /* Softer corners on tiny screens */
-    }
-
-    /* From 5 */
-    .thumbnail-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .product-page-container {
-        padding: 15px;
-        margin-top: 15px;
-    }
-
-    /* Product Detail Actions Responsive */
-    .product-detail .thumbnail-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .product-detail .product-page-container {
-        padding: 15px;
-        margin-top: 15px;
-    }
-}
 
 /* All Categories Page (from reference, adapted) */
 .all-categories-page .page-header {
@@ -3921,290 +3348,7 @@ textarea.form-control {
 }
 
 /* Responsive for Categories Page */
-@media (max-width: 768px) {
-    .all-categories-page .category-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-    }
 
-    .all-categories-page .page-header h1 {
-        font-size: 2.5rem;
-    }
-
-    .all-categories-page .category-card-info h3 {
-        font-size: 1.6rem;
-    }
-}
-
-/* Fix Product Card Actions on Mobile (Always Visible) */
-@media (max-width: 767px) {
-
-    /* Targets mobile/tablet portrait */
-    .product-card-actions {
-        max-height: none !important;
-        /* Remove height limit */
-        opacity: 1 !important;
-        /* Always fully visible */
-        margin-top: 10px !important;
-        /* Add spacing for flow */
-        transition: none;
-        /* Optional: Disable animation for instant show */
-    }
-
-    .product-card:hover .product-card-actions {
-        /* No need for hover changes on mobile */
-        transform: none;
-    }
-
-    /* Optional: Adjust action row for better touch targets on mobile */
-    .action-row {
-        flex-wrap: wrap;
-        /* Allow wrapping if screen is very small */
-        gap: 12px;
-        /* Larger gaps for fingers */
-    }
-
-    .btn-add-cart,
-    .quantity-selector,
-    .weight-selector {
-        font-size: 1.1rem;
-        /* Slightly larger text/buttons for mobile usability */
-        padding: 12px;
-        /* Bigger tap areas */
-    }
-}
-
-/* FIXED Mobile Sidebar: Dynamic height + flex safeguards (replaces all prior mobile sidebar rules) */
-@media (max-width: 767px) {
-
-    /* Hamburger visibility */
-    .hamburger {
-        display: flex !important;
-        visibility: visible !important;
-        position: fixed !important;
-        top: 10px !important;
-        left: 10px !important;
-        z-index: 1002 !important;
-        /* FIXED: Above sidebar */
-    }
-
-    /* Ensure full viewport coverage without vh bugs */
-    .global-sidebar {
-        display: flex !important;
-        /* FIXED: Keep flex (not block) for column stacking */
-        flex-direction: column !important;
-        /* Reinforce vertical layout */
-        visibility: visible !important;
-        width: 85vw !important;
-        /* FIXED: Narrower for thumb-swipe close */
-        height: 100dvh !important;
-        /* Reinforce dynamic height */
-        min-height: 100vh !important;
-        left: 0 !important;
-        top: 0 !important;
-        overflow: visible !important;
-        /* FIXED: Allow natural overflow; no hidden clipping */
-        background: var(--background-color);
-        /* Ensure bg fills */
-        opacity: 1 !important;
-        /* FIXED: Force visible (overrides any base if needed) */
-    }
-
-    .global-sidebar.open {
-        transform: translateX(0) !important;
-    }
-
-    /* Content: Always fill & scroll */
-    .global-sidebar .sidebar-content {
-        flex: 1 1 auto !important;
-        /* FIXED: Grow/shrink reliably */
-        min-height: 0 !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        padding: 10px 20px 20px !important;
-        /* FIXED: Mobile padding for readability */
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: flex !important;
-        flex-direction: column !important;
-        background: inherit;
-        /* Inherit to avoid gaps */
-    }
-
-    /* Footer sticks bottom */
-    .sidebar-footer {
-        flex-shrink: 0 !important;
-        margin-top: auto !important;
-    }
-
-    /* Overlay: Dim for focus */
-    .sidebar-overlay.active {
-        display: block !important;
-        opacity: 0.6 !important;
-        background-color: rgba(0, 0, 0, 0.5) !important;
-        height: 100dvh !important;
-        /* FIXED: Match sidebar height */
-    }
-
-    /* Hide any desktop nav conflicts */
-    .header-actions .menu {
-        display: none !important;
-    }
-
-    /* Prevent body scroll when open */
-    body.sidebar-open {
-        overflow: hidden !important;
-        /* FIXED: Lock body scroll (add .sidebar-open via JS if needed) */
-    }
-}
-
-@media (max-width: 992px) {
-    .product-detail .product-actions .btn-wishlist {
-        width: 50px !important;
-        /* Keep fixed square */
-        height: 50px !important;
-        border-radius: 50% !important;
-        /* Circle, not pill */
-        padding: 0 !important;
-        /* No extra padding */
-        margin-left: auto;
-        /* Keep right-aligned if possible */
-    }
-}
-
-@media (max-width: 768px) {
-    .product-detail .product-actions .btn-wishlist {
-        width: 60px !important;
-        /* Slightly larger for touch */
-        height: 60px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .process-images {
-        margin-bottom: 50px !important;
-        /* Extra buffer */
-    }
-
-    .img-small {
-        bottom: -10px !important;
-        /* Reduce protrusion */
-        width: 70% !important;
-        /* Slightly wider to fit better */
-    }
-}
-
-/* FIXED: Mobile Global Sidebar - Reveal Main Nav & Ensure Content Fills (Overrides display:none) */
-@media (max-width: 992px) {
-
-    /* Override global .main-nav hide ONLY in sidebar context */
-    .global-sidebar .main-nav {
-        display: block !important;
-        /* Key fix: Show the menu links */
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    .global-sidebar .sidebar-content {
-        /* Reinforce: Ensure content area grows and scrolls */
-        flex: 1 1 auto !important;
-        min-height: 0 !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        padding: 10px 20px 20px !important;
-        /* Breathing room */
-        display: flex !important;
-        flex-direction: column !important;
-        background: inherit !important;
-        /* No gaps */
-    }
-}
-
-@media (max-width: 767px) {
-
-    /* Build on existing rules: Extra visibility for nav items */
-    .global-sidebar .main-nav {
-        display: flex !important;
-        /* Flex for better mobile stacking if needed */
-        flex-direction: column !important;
-        gap: 0 !important;
-        /* Tighten spacing */
-    }
-
-    .global-sidebar .main-nav li {
-        list-style: none !important;
-        /* Clean bullets */
-        width: 100% !important;
-    }
-
-    .global-sidebar .main-nav li a {
-        /* Make links touch-friendly: Larger, full-width */
-        display: flex !important;
-        align-items: center !important;
-        gap: 15px !important;
-        padding: 16px 0 !important;
-        /* More vertical space for fingers */
-        text-decoration: none !important;
-        color: var(--text-color) !important;
-        font-size: 1.1rem !important;
-        /* Readable */
-        font-weight: 500 !important;
-        transition: color 0.2s ease !important;
-        border-radius: 8px !important;
-        /* Subtle tap feedback */
-        padding-left: 15px !important;
-        /* Indent for icons */
-        opacity: 1 !important;
-        visibility: visible !important;
-        min-height: 44px !important;
-        /* WCAG touch target minimum */
-    }
-
-    .global-sidebar .main-nav li a:hover,
-    .global-sidebar .main-nav li a.active {
-        color: var(--primary-color) !important;
-        background: rgba(139, 69, 19, 0.1) !important;
-        /* Subtle hover bg */
-    }
-
-    .global-sidebar .main-nav li a i {
-        font-size: 1.2rem !important;
-        width: 25px !important;
-        text-align: center !important;
-        color: var(--light-text-color) !important;
-        flex-shrink: 0 !important;
-        /* Icons don't squash */
-    }
-
-    /* Sidebar overall: Double-check height & visibility */
-    .global-sidebar {
-        height: 100dvh !important;
-        min-height: 100vh !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        overflow: visible !important;
-    }
-
-    .global-sidebar.open {
-        transform: translateX(0) !important;
-    }
-
-    /* Footer: Ensure it doesn't overlap content */
-    .global-sidebar .sidebar-footer {
-        flex-shrink: 0 !important;
-        margin-top: auto !important;
-        padding: 20px 25px !important;
-        border-top: 1px solid var(--border-color) !important;
-    }
-
-    /* If using body lock (add via JS if not) */
-    body.global-sidebar-open {
-        /* Changed class name to match */
-        overflow: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-    }
-}
 
 /* Custom scrollbar for sidebar content (if not already there) */
 .global-sidebar .sidebar-content::-webkit-scrollbar {
@@ -4217,216 +3361,7 @@ textarea.form-control {
 }
 
 /* REFINED: Mobile Global Sidebar - Compact Width, Better Link Spacing, Header Fixes */
-@media (max-width: 767px) {
 
-    /* Smaller Width: Reduce to 70vw for compact feel */
-    .global-sidebar {
-        width: 70vw !important;
-        /* From 85vw - adjust to 65vw if too wide still */
-        max-width: 320px !important;
-        /* Cap for very wide phones */
-    }
-
-    /* Links: Indent left, tighten right space */
-    .global-sidebar .main-nav li a {
-        padding: 16px 15px !important;
-        /* Left indent + smaller right padding */
-        padding-left: 20px !important;
-        /* Extra left space for alignment */
-        margin-right: 10px !important;
-        /* Subtle right margin to avoid edge hug */
-        border-radius: 8px !important;
-        /* Keeps tap feedback */
-    }
-
-    .global-sidebar .main-nav li a i {
-        margin-right: 12px !important;
-        /* Tighten icon-to-text gap */
-        flex-shrink: 0 !important;
-    }
-
-    /* Header: Fix icon-logo overlap & smaller buttons */
-    .global-sidebar .sidebar-header {
-        padding: 12px 16px !important;
-        /* Reduced overall padding */
-        gap: 10px !important;
-        /* Space between logo and close */
-        align-items: center !important;
-        justify-content: space-between !important;
-        /* Ensure even distribution */
-    }
-
-    .global-sidebar .sidebar-logo {
-        font-size: 1.5rem !important;
-        /* Slightly smaller text */
-        margin-right: 8px !important;
-        /* Push away from close button */
-        flex-shrink: 0 !important;
-        /* Prevent logo squash */
-        white-space: nowrap !important;
-        /* Keep inline */
-    }
-
-    /* Close Button: Smaller, no overlap */
-    #close-sidebar-btn {
-        font-size: 1.2rem !important;
-        /* Smaller icon */
-        width: 32px !important;
-        /* Fixed small size */
-        height: 32px !important;
-        border-radius: 50% !important;
-        /* Circle for tap */
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        background: rgba(0, 0, 0, 0.05) !important;
-        /* Subtle bg */
-        color: var(--light-text-color) !important;
-        cursor: pointer !important;
-        border: none !important;
-        transition: background 0.2s !important;
-        padding: 0 !important;
-        /* No extra padding */
-        margin-left: auto !important;
-        /* Push to right edge */
-    }
-
-    #close-sidebar-btn:hover {
-        background: rgba(139, 69, 19, 0.1) !important;
-        /* Hover tint */
-    }
-
-    /* If logo has an image (e.g., <img> inside .sidebar-logo) */
-    .sidebar-logo img {
-        width: 32px !important;
-        /* Scale down logo image */
-        height: 32px !important;
-        margin-right: 8px !important;
-        /* Space from text/icon */
-        object-fit: contain !important;
-    }
-}
-
-/* Optional: Tighter content padding if links still feel spaced */
-@media (max-width: 480px) {
-    .global-sidebar .sidebar-content {
-        padding: 10px 8px 20px 20px !important;
-        /* Even tighter on tiny screens */
-    }
-
-    .global-sidebar .main-nav li a {
-        padding: 14px 12px !important;
-        font-size: 1rem !important;
-        /* Slightly smaller text */
-    }
-}
-
-/* FIXED: Mobile Global Sidebar - Shift Content Left (Reduce Right Space) */
-@media (max-width: 767px) {
-
-    /* Content Area: Base left indent, trim right padding */
-    .global-sidebar .sidebar-content {
-        padding: 10px 8px 20px 20px !important;
-        /* Left: 20px indent; Right: 8px tight */
-    }
-
-    /* Links: Left-shift with controlled spacing */
-    .global-sidebar .main-nav {
-        padding: 0 !important;
-        /* No extra container padding */
-        margin: 0 !important;
-    }
-
-    .global-sidebar .main-nav li {
-        margin: 0 !important;
-        /* No list margins */
-        padding: 0 !important;
-    }
-
-    .global-sidebar .main-nav li a {
-        display: flex !important;
-        align-items: center !important;
-        gap: 12px !important;
-        /* Tight icon-text gap */
-        padding: 14px 12px !important;
-        /* Vertical: 14px; Horizontal: 12px total */
-        padding-left: 4px !important;
-        /* Minimal left add-on for subtle shift */
-        margin-left: -4px !important;
-        /* Negative margin for net left pull (~16px total shift) */
-        margin-right: 4px !important;
-        /* Trim right excess */
-        border-radius: 0 !important;
-        /* Remove if unwanted; or keep for subtle */
-        justify-content: flex-start !important;
-        /* Force left alignment */
-        text-align: left !important;
-        width: auto !important;
-        /* Don't force full width */
-        min-height: 44px !important;
-        /* Touch target */
-    }
-
-    .global-sidebar .main-nav li a i {
-        flex-shrink: 0 !important;
-        width: 20px !important;
-        /* Fixed icon width to prevent drift */
-        text-align: center !important;
-        margin-right: 8px !important;
-        /* Consistent icon spacing */
-    }
-
-    /* Optional: If still too spaced, add subtle right trim */
-    .global-sidebar .main-nav li a::after {
-        content: '' !important;
-        display: block !important;
-        width: 8px !important;
-        /* Invisible spacer to hug right */
-        height: 1px !important;
-    }
-}
-
-/* Tighter on very small screens */
-@media (max-width: 480px) {
-    .global-sidebar .sidebar-content {
-        padding-left: 16px !important;
-        /* Slightly less indent on tiny */
-        padding-right: 4px !important;
-        /* Even tighter right */
-    }
-
-    .global-sidebar .main-nav li a {
-        padding-left: 2px !important;
-        margin-left: -2px !important;
-        /* Finer left shift */
-        gap: 10px !important;
-    }
-}
-
-/* Smaller header buttons on mobile */
-@media (max-width: 767px) {
-
-    .hamburger,
-    .icon-btn {
-        width: 36px !important;
-        height: 36px !important;
-        border-radius: 8px !important;
-        /* Slightly smaller radius for proportion */
-    }
-
-    .hamburger i,
-    .icon-btn i {
-        font-size: 1.1rem !important;
-        /* Optional: Scale down icons slightly to fit */
-    }
-}
-
-@media (max-width: 767px) {
-    .site-header {
-        z-index: 1003 !important;
-        /* Above sidebar (1001) and hamburger (1002) */
-    }
-}
 
 /* ... (existing styles) */
 
@@ -4720,7 +3655,722 @@ textarea.form-control {
 }
 
 /* Responsive for Home Page Sections */
+@media (max-width: 767px) {
+    .icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        color: var(--dark) !important;
+        /* FIXED: Reinforce on mobile */
+    }
+
+    .icon-btn i {
+        font-size: 1rem !important;
+        /* FIXED: Slightly smaller icons on mobile */
+    }
+
+    .icon-btn:hover,
+    .icon-btn:focus {
+        color: var(--accent) !important;
+        /* Golden hover on mobile too */
+    }
+
+    body {
+        padding-top: 70px;
+        /* FIXED: Match mobile base header height (adjusts from 90px) */
+    }
+
+    .site-header {
+        height: 70px;
+        /* Shorter base on mobile */
+        overflow: hidden !important;
+        /* FIXED: Strictly prevent right-scroll revealing icons */
+        z-index: 1003 !important;
+        /* Above sidebar (1001) and hamburger (1002) */
+    }
+
+    .header-inner {
+        padding: 8px 12px 8px 60px !important;
+        /* FIXED: Increased left padding (from 8px/12px) to shift logo right, avoiding hamburger overlap */
+        gap: 8px;
+        /* FIXED: Add small gap between major flex items (hamburger/logo/actions) - but since hamburger is fixed, this gaps logo-actions */
+    }
+
+    .logo {
+        font-size: 20px;
+        /* FIXED: Smaller font for better fit */
+        gap: 6px;
+        /* FIXED: Reduce logo internal gap */
+        margin-left: 0 !important;
+        /* FIXED: Ensure no negative/zero left margin pulls it back */
+    }
+
+    .logo img {
+        height: 50px;
+        /* FIXED: Smaller default on mobile (from 60px) for quicker shrink feel */
+    }
+
+    .header-actions {
+        gap: 6px;
+        /* FIXED: Tighter icon gaps to reduce total width */
+        flex-wrap: wrap;
+        /* FIXED: Wrap icons if screen <320px */
+        justify-content: flex-end;
+    }
+
+    .icon-btn {
+        width: 36px !important;
+        /* FIXED: Smaller icons on mobile */
+        height: 36px !important;
+        border-radius: 8px !important;
+        /* Slightly smaller radius for proportion */
+    }
+
+    .icon-btn i {
+        font-size: 1.1rem !important;
+        /* Optional: Scale down icons slightly to fit */
+    }
+
+    .site-header.scrolled {
+        height: 50px !important;
+        /* FIXED: Even tighter (from 55px) for more noticeable shrink */
+    }
+
+    .site-header.scrolled .header-inner {
+        padding: 4px 8px 4px 56px !important;
+        /* FIXED: Proportional left padding on scroll (slightly reduced but still buffered for overlap prevention) */
+    }
+
+    .site-header.scrolled .logo img {
+        height: 40px !important;
+        /* FIXED: More aggressive shrink (from 45px) */
+    }
+
+    .site-header.scrolled .logo {
+        font-size: 18px !important;
+        /* FIXED: Scale down text too */
+    }
+
+    body.scrolled-parent {
+        /* FIXED: Add this class via JS when .scrolled is active */
+        padding-top: 50px !important;
+    }
+
+    /* FIXED: Hamburger positioning - ensure it's fully left and doesn't intrude */
+    .hamburger {
+        display: flex !important;
+        visibility: visible !important;
+        position: fixed !important;
+        top: 10px !important;
+        left: 10px !important;
+        z-index: 1002 !important;
+        /* FIXED: Above sidebar */
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 8px !important;
+        /* Slightly smaller radius for proportion */
+    }
+
+    .hamburger i {
+        font-size: 1.1rem !important;
+        /* Optional: Scale down icons slightly to fit */
+    }
+
+    /* Fix Product Card Actions on Mobile (Always Visible) */
+    /* Targets mobile/tablet portrait */
+    .product-card-actions {
+        max-height: none !important;
+        /* Remove height limit */
+        opacity: 1 !important;
+        /* Always fully visible */
+        margin-top: 10px !important;
+        /* Add spacing for flow */
+        transition: none;
+        /* Optional: Disable animation for instant show */
+    }
+
+    .product-card:hover .product-card-actions {
+        /* No need for hover changes on mobile */
+        transform: none;
+    }
+
+    /* Optional: Adjust action row for better touch targets on mobile */
+    .action-row {
+        flex-wrap: wrap;
+        /* Allow wrapping if screen is very small */
+        gap: 12px;
+        /* Larger gaps for fingers */
+    }
+
+    .btn-add-cart,
+    .quantity-selector,
+    .weight-selector {
+        font-size: 1.1rem;
+        /* Slightly larger text/buttons for mobile usability */
+        padding: 12px;
+        /* Bigger tap areas */
+    }
+
+    /* FIXED Mobile Sidebar: Dynamic height + flex safeguards (replaces all prior mobile sidebar rules) */
+    /* Ensure full viewport coverage without vh bugs */
+    .global-sidebar {
+        display: flex !important;
+        /* FIXED: Keep flex (not block) for column stacking */
+        flex-direction: column !important;
+        /* Reinforce vertical layout */
+        visibility: hidden !important;
+        /* FIXED: Hide by default to prevent any peeking when closed */
+        position: fixed !important;
+        /* FIXED: Ensure fixed positioning to take it out of flow and allow full-screen overlay */
+        width: 70vw !important;
+        /* FIXED: Narrower for thumb-swipe close */
+        /* From 85vw - adjust to 65vw if too wide still */
+        max-width: 320px !important;
+        /* Cap for very wide phones */
+        height: 100dvh !important;
+        /* Reinforce dynamic height */
+        min-height: 100vh !important;
+        left: 0 !important;
+        top: 0 !important;
+        overflow: visible !important;
+        /* FIXED: Allow natural overflow; no hidden clipping */
+        background: var(--background-color);
+        /* Ensure bg fills */
+        opacity: 0 !important;
+        /* FIXED: Start with opacity 0 for smooth transition */
+        transform: translateX(-100%) !important;
+        /* FIXED: Base off-screen position to prevent title visibility when closed */
+        transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease !important;
+        /* FIXED: Add transitions for smooth open/close */
+        z-index: 1001 !important;
+        /* FIXED: Set z-index below header and hamburger but above content */
+    }
+
+    .global-sidebar.open {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        /* FIXED: Make visible only when open */
+    }
+
+    /* Content: Always fill & scroll */
+    .global-sidebar .sidebar-content {
+        flex: 1 1 auto !important;
+        /* FIXED: Grow/shrink reliably */
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 10px 8px 20px 20px !important;
+        /* FIXED: Mobile padding for readability */
+        /* Left: 20px indent; Right: 8px tight */
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+        background: inherit;
+        /* Inherit to avoid gaps */
+    }
+
+    /* Footer sticks bottom */
+    .sidebar-footer {
+        flex-shrink: 0 !important;
+        margin-top: auto !important;
+        padding: 20px 25px !important;
+        border-top: 1px solid var(--border-color) !important;
+    }
+
+    /* Overlay: Dim for focus */
+    .sidebar-overlay.active {
+        display: block !important;
+        opacity: 0.6 !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        height: 100dvh !important;
+        /* FIXED: Match sidebar height */
+    }
+
+    /* Hide any desktop nav conflicts */
+    .header-actions .menu {
+        display: none !important;
+    }
+
+    /* Prevent body scroll when open */
+    body.sidebar-open {
+        overflow: hidden !important;
+        /* FIXED: Lock body scroll (add .sidebar-open via JS if needed) */
+    }
+
+    body.global-sidebar-open {
+        /* Changed class name to match */
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+    }
+
+    /* Build on existing rules: Extra visibility for nav items */
+    .global-sidebar .main-nav {
+        display: flex !important;
+        /* Flex for better mobile stacking if needed */
+        flex-direction: column !important;
+        gap: 0 !important;
+        /* Tighten spacing */
+        padding: 0 !important;
+        /* No extra container padding */
+        margin: 0 !important;
+    }
+
+    .global-sidebar .main-nav li {
+        list-style: none !important;
+        /* Clean bullets */
+        width: 100% !important;
+        margin: 0 !important;
+        /* No list margins */
+        padding: 0 !important;
+    }
+
+    .global-sidebar .main-nav li a {
+        /* Make links touch-friendly: Larger, full-width */
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        /* Tight icon-text gap */
+        padding: 16px 15px !important;
+        /* Left indent + smaller right padding */
+        /* Vertical: 14px; Horizontal: 12px total */
+        padding-left: 4px !important;
+        /* Minimal left add-on for subtle shift */
+        margin-left: -4px !important;
+        /* Negative margin for net left pull (~16px total shift) */
+        margin-right: 4px !important;
+        /* Trim right excess */
+        border-radius: 0 !important;
+        /* Remove if unwanted; or keep for subtle */
+        text-decoration: none !important;
+        color: var(--text-color) !important;
+        font-size: 1.1rem !important;
+        /* Readable */
+        font-weight: 500 !important;
+        transition: color 0.2s ease !important;
+        justify-content: flex-start !important;
+        /* Force left alignment */
+        text-align: left !important;
+        width: auto !important;
+        /* Don't force full width */
+        min-height: 44px !important;
+        /* WCAG touch target minimum */
+        /* Touch target */
+    }
+
+    .global-sidebar .main-nav li a:hover,
+    .global-sidebar .main-nav li a.active {
+        color: var(--primary-color) !important;
+        background: rgba(139, 69, 19, 0.1) !important;
+        /* Subtle hover bg */
+    }
+
+    .global-sidebar .main-nav li a i {
+        font-size: 1.2rem !important;
+        width: 20px !important;
+        /* Fixed icon width to prevent drift */
+        text-align: center !important;
+        color: var(--light-text-color) !important;
+        flex-shrink: 0 !important;
+        /* Icons don't squash */
+        margin-right: 8px !important;
+        /* Consistent icon spacing */
+    }
+
+    /* Optional: If still too spaced, add subtle right trim */
+    .global-sidebar .main-nav li a::after {
+        content: '' !important;
+        display: block !important;
+        width: 8px !important;
+        /* Invisible spacer to hug right */
+        height: 1px !important;
+    }
+
+    /* Sidebar overall: Double-check height & visibility */
+    .global-sidebar {
+        height: 100dvh !important;
+        min-height: 100vh !important;
+        overflow: visible !important;
+    }
+
+    /* Header: Fix icon-logo overlap & smaller buttons */
+    .global-sidebar .sidebar-header {
+        position: relative !important;
+        /* FIXED: Make relative for absolute close button positioning */
+        padding: 12px 50px 12px 16px !important;
+        /* FIXED: Increase right padding to accommodate close button without overlap */
+        /* Reduced overall padding */
+        gap: 10px !important;
+        /* Space between logo and close */
+        align-items: center !important;
+        justify-content: flex-start !important;
+        /* FIXED: Change to flex-start since close is absolute */
+    }
+
+    .global-sidebar .sidebar-logo {
+        font-size: 1.5rem !important;
+        /* Slightly smaller text */
+        margin-right: 8px !important;
+        /* Push away from close button */
+        flex-shrink: 0 !important;
+        /* Prevent logo squash */
+        white-space: nowrap !important;
+        /* Keep inline */
+        max-width: calc(100% - 60px) !important;
+        /* FIXED: Prevent logo from overlapping close button area */
+    }
+
+    /* If logo has an image (e.g., <img> inside .sidebar-logo) */
+    .sidebar-logo img {
+        width: 32px !important;
+        /* Scale down logo image */
+        height: 32px !important;
+        margin-right: 8px !important;
+        /* Space from text/icon */
+        object-fit: contain !important;
+    }
+
+    /* Close Button: Smaller, no overlap */
+    #close-sidebar-btn {
+        position: absolute !important;
+        /* FIXED: Use absolute positioning to prevent pushing beyond sidebar area due to flex overflow */
+        top: 50% !important;
+        /* FIXED: Position for vertical centering */
+        right: 16px !important;
+        /* FIXED: Anchor to right within padding */
+        transform: translateY(-50%) !important;
+        /* FIXED: Center vertically */
+        margin-left: 0 !important;
+        /* FIXED: Remove flex margin */
+        font-size: 1.2rem !important;
+        /* Smaller icon */
+        width: 32px !important;
+        /* Fixed small size */
+        height: 32px !important;
+        border-radius: 50% !important;
+        /* Circle for tap */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+        /* Subtle bg */
+        color: var(--light-text-color) !important;
+        cursor: pointer !important;
+        border: none !important;
+        transition: background 0.2s !important;
+        padding: 0 !important;
+        /* No extra padding */
+    }
+
+    #close-sidebar-btn:hover {
+        background: rgba(139, 69, 19, 0.1) !important;
+        /* Hover tint */
+    }
+}
+
+@media (max-width: 400px) {
+    .action-row {
+        flex-wrap: wrap;
+        gap: 8px;
+        /* Add gap for better spacing */
+    }
+
+    .quantity-selector,
+    .weight-selector {
+        flex-basis: auto;
+        /* Allow natural width instead of 100% */
+        min-width: 100px;
+        /* Minimum width to prevent too small */
+        flex-grow: 0;
+        /* Don't grow to fill */
+    }
+
+    .btn-add-cart {
+        flex-basis: auto;
+        /* Allow natural width */
+        flex-grow: 1;
+        /* Grow to fill remaining space */
+        min-width: 120px;
+        /* Ensure button doesn't collapse */
+    }
+}
+
 @media (max-width: 992px) {
+    .gallery-grid {
+        grid-template-columns: 1fr !important;
+        /* Switch to single column for safety */
+        grid-auto-rows: auto;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gallery-item {
+        grid-column: 1 / -1 !important;
+        /* Reset all to full width */
+        grid-row: auto !important;
+    }
+
+    .item-1 {
+        grid-column: 1 / 3;
+        grid-row: 1;
+    }
+
+    .profile-container .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+        gap: 20px !important;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+        /* Increase gap for breathing room */
+    }
+
+    /* General (Merged from 1,2,3,4,5,7) */
+    .footer-content {
+        /* From 1 */
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .about-grid {
+        /* From 2 */
+        grid-template-columns: 1fr;
+    }
+
+    .about-grid.reverse-mobile {
+        /* From 2 */
+        grid-auto-flow: dense;
+    }
+
+    .about-grid.reverse-mobile .about-text {
+        /* From 2 */
+        grid-row: 1;
+    }
+
+    .values-grid {
+        /* From 2 */
+        grid-template-columns: 1fr;
+    }
+
+    .process-images {
+        /* From 2 */
+        margin-bottom: 30px;
+    }
+
+    .team-card {
+        /* From 2 */
+        flex-direction: column;
+    }
+
+    .team-image {
+        /* From 2 */
+        flex: 0 0 300px;
+        width: 100%;
+    }
+
+    .contact-grid {
+        /* From 3 */
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        /* From 4 */
+        font-size: 3.5rem;
+    }
+
+    h2 {
+        /* From 4 */
+        font-size: 2.5rem;
+    }
+
+    .main-nav {
+        /* From 4 */
+        display: none;
+    }
+
+    .welcome-section {
+        /* From 4 */
+        grid-template-columns: 1fr;
+    }
+
+    .categories-grid {
+        /* From 4 */
+        grid-template-columns: 1fr;
+    }
+
+    .promise-section {
+        /* From 4 */
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .promise-section .promise-image {
+        /* From 4 */
+        order: -1;
+    }
+
+    .testimonial-grid {
+        /* From 4 */
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-grid {
+        /* From 4 */
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .item-1 {
+        /* From 4 */
+        grid-column: 1 / 3;
+        grid-row: 1;
+    }
+
+    .promo-grid {
+        /* From 4 */
+        grid-template-columns: 1fr;
+    }
+
+    .product-page-container {
+        /* From 5 */
+        grid-template-columns: 1fr;
+    }
+
+    .product-actions {
+        /* From 5 */
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .quantity-selector {
+        /* From 5 */
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .btn-primary,
+    .btn-wishlist {
+        /* From 5 */
+        width: calc(50% - 10px);
+    }
+
+    .btn-wishlist {
+        /* From 5 */
+        border-radius: 50px;
+        padding: 15px 25px;
+    }
+
+    .profile-container {
+        /* From 7 */
+        grid-template-columns: 1fr;
+    }
+
+    .profile-sidebar {
+        /* From 7 */
+        margin-bottom: 30px;
+    }
+
+    .sidebar-nav ul {
+        /* From 7 */
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* Current mobile (Merged) */
+    .hero-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .swiper {
+        height: 250px;
+    }
+
+    .slide {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .slide img {
+        width: 100%;
+        max-height: 200px;
+    }
+
+    .side-banners {
+        display: none;
+    }
+
+    .slide h2 {
+        font-size: 24px;
+    }
+
+    .promo-row {
+        grid-template-columns: 1fr;
+    }
+
+    .cats-row {
+        gap: 8px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Product Detail Actions Responsive */
+    .product-detail .product-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .product-detail .quantity-selector {
+        margin-bottom: 15px;
+    }
+
+    .product-detail .product-actions .btn-primary,
+    .product-detail .product-actions .btn-wishlist {
+        width: calc(50% - 10px);
+    }
+
+    .product-detail .product-actions .btn-wishlist {
+        border-radius: 50px;
+        padding: 15px 25px;
+    }
+
+    .product-detail .product-actions .btn-wishlist {
+        width: 50px !important;
+        /* Keep fixed square */
+        height: 50px !important;
+        border-radius: 50% !important;
+        /* Circle, not pill */
+        padding: 0 !important;
+        /* No extra padding */
+        margin-left: auto;
+        /* Keep right-aligned if possible */
+    }
+
+    /* FIXED: Mobile Global Sidebar - Reveal Main Nav & Ensure Content Fills (Overrides display:none) */
+    /* Override global .main-nav hide ONLY in sidebar context */
+    .global-sidebar .main-nav {
+        display: block !important;
+        /* Key fix: Show the menu links */
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .global-sidebar .sidebar-content {
+        /* Reinforce: Ensure content area grows and scrolls */
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 10px 20px 20px !important;
+        /* Breathing room */
+        display: flex !important;
+        flex-direction: column !important;
+        background: inherit !important;
+        /* No gaps */
+    }
 
     .welcome-section,
     .promise-section {
@@ -4747,27 +4397,7 @@ textarea.form-control {
     .promo-grid {
         grid-template-columns: 1fr;
     }
-}
 
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    h2 {
-        font-size: 2rem;
-    }
-
-    .section-padding {
-        padding: 60px 20px;
-    }
-
-    .hero-actions {
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 992px) {
     .hero {
         height: 60vh;
         /* Reduce from 70vh for tablets */
@@ -4790,6 +4420,196 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        /* Force single column to prevent overlap */
+        gap: 16px !important;
+    }
+
+    .product-card {
+        min-width: auto !important;
+        /* Remove min-width constraint on mobile */
+        width: 100% !important;
+    }
+
+    .profile-container .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+        /* Wider for mobile visibility */
+        gap: 24px !important;
+    }
+
+    .profile-container .product-card {
+        min-height: 380px;
+        /* Slightly shorter for mobile if content reflows */
+    }
+
+    .listing-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-bar {
+        flex: 1 1 100%;
+        order: -1;
+        /* Move search to top on mobile */
+    }
+
+    .search-bar input {
+        padding: 14px 16px 14px 45px;
+        /* More vertical space on mobile */
+    }
+
+    /* General (Merged from 1,2,3,4,5,7) */
+    .footer-content {
+        /* From 1 */
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        /* From 2,3,4 */
+        font-size: 2.5rem;
+    }
+
+    .hero h1 {
+        /* From 2 */
+        font-size: 3rem;
+    }
+
+    h2 {
+        /* From 2,3,4 */
+        font-size: 2.2rem;
+    }
+
+    .img-small {
+        /* From 2 */
+        width: 60%;
+        bottom: -20px;
+        right: 10px;
+    }
+
+    .cta-section {
+        /* From 2 */
+        background-attachment: scroll;
+    }
+
+    h2 {
+        /* From 3,4 */
+        font-size: 2.2rem;
+    }
+
+    .page-header {
+        /* From 3 */
+        padding: 40px 20px;
+    }
+
+    .hero-image {
+        /* From 3 */
+        height: 300px;
+    }
+
+    h2 {
+        /* From 4 */
+        font-size: 2rem;
+    }
+
+    .section-padding {
+        /* From 4 */
+        padding: 60px 20px;
+    }
+
+    .hero-actions {
+        /* From 4 */
+        flex-direction: column;
+    }
+
+    .product-page-container {
+        /* From 5 */
+        padding: 20px;
+    }
+
+    .product-title {
+        /* From 5 */
+        font-size: 2rem;
+    }
+
+    .product-price {
+        /* From 5 */
+        font-size: 1.8rem;
+    }
+
+    .btn-primary,
+    .btn-wishlist {
+        /* From 5 */
+        width: 100%;
+    }
+
+    .form-row,
+    .address-grid {
+        /* From 7 */
+        grid-template-columns: 1fr;
+    }
+
+    .order-table {
+        /* From 7 */
+        display: block;
+        overflow-x: auto;
+    }
+
+    /* Current mobile (Already included above) */
+
+    /* Product Detail Actions Responsive */
+    .product-detail .product-page-container {
+        padding: 20px;
+    }
+
+    .product-detail .product-title {
+        font-size: 2rem;
+    }
+
+    .product-detail .product-price {
+        font-size: 1.8rem;
+    }
+
+    .product-detail .product-actions .btn-primary,
+    .product-detail .product-actions .btn-wishlist {
+        width: 100%;
+    }
+
+    .product-detail .product-actions .btn-wishlist {
+        width: 60px !important;
+        /* Slightly larger for touch */
+        height: 60px !important;
+    }
+
+    .all-categories-page .category-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .all-categories-page .page-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .all-categories-page .category-card-info h3 {
+        font-size: 1.6rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .section-padding {
+        padding: 60px 20px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+    }
+
     .hero {
         height: 50vh;
         /* Shorter for mobiles to avoid dominating the screen */
@@ -4804,27 +4624,7 @@ textarea.form-control {
     .hero p {
         font-size: 1rem;
     }
-}
 
-@media (max-width: 480px) {
-    .hero {
-        height: 40vh;
-        /* Even shorter for small mobiles */
-        padding: 20px;
-        /* Add padding to prevent edge hugging */
-    }
-
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .hero-actions .btn {
-        padding: 10px 20px;
-        /* Smaller buttons for touch */
-    }
-}
-
-@media (max-width: 768px) {
     .categories-section .category-grid {
         grid-template-columns: 1fr;
         /* Ensure single column if not already (overrides any 1fr 1fr) */
@@ -4849,24 +4649,7 @@ textarea.form-control {
         height: 200px;
         /* Shorter images */
     }
-}
 
-@media (max-width: 480px) {
-    .categories-section .category-card {
-        padding: 15px;
-    }
-
-    .categories-section .category-card h3 {
-        font-size: 1.2rem;
-    }
-
-    .categories-section .shop-now-link {
-        font-size: 0.9rem;
-        /* Smaller link text */
-    }
-}
-
-@media (max-width: 768px) {
     .promo-grid {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -4888,19 +4671,7 @@ textarea.form-control {
         height: 150px;
         /* Smaller images */
     }
-}
 
-@media (max-width: 480px) {
-    .promo-card {
-        padding: 15px;
-    }
-
-    .promo-card h3 {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 768px) {
     .gallery-grid {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
@@ -4911,17 +4682,143 @@ textarea.form-control {
         height: auto;
         /* Flexible height */
     }
+
+    .section-padding {
+        padding: 60px 15px;
+        /* Reduce for mobiles */
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .container {
+        padding: 15px;
+    }
 }
 
 @media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        /* Tighter gap on very small screens */
+    }
+
+    .product-card {
+        min-width: auto !important;
+        width: 100% !important;
+    }
+
+    .container {
+        padding: 10px !important;
+        /* Ensure container doesn't squeeze cards */
+    }
+
+    .profile-container .product-grid {
+        grid-template-columns: 1fr !important;
+        /* Single column to fully avoid trim/overlap */
+        gap: 20px !important;
+    }
+
+    .search-bar {
+        border-radius: 12px;
+        /* Softer corners on tiny screens */
+    }
+
+    /* From 5 */
+    .thumbnail-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .product-page-container {
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    /* Product Detail Actions Responsive */
+    .product-detail .thumbnail-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .product-detail .product-page-container {
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .process-images {
+        margin-bottom: 50px !important;
+        /* Extra buffer */
+    }
+
+    .img-small {
+        bottom: -10px !important;
+        /* Reduce protrusion */
+        width: 70% !important;
+        /* Slightly wider to fit better */
+    }
+
+    .global-sidebar .sidebar-content {
+        padding: 10px 8px 20px 20px !important;
+        /* Even tighter on tiny screens */
+        padding-left: 16px !important;
+        /* Slightly less indent on tiny */
+        padding-right: 4px !important;
+        /* Even tighter right */
+    }
+
+    .global-sidebar .main-nav li a {
+        padding: 14px 12px !important;
+        font-size: 1rem !important;
+        /* Slightly smaller text */
+        padding-left: 2px !important;
+        margin-left: -2px !important;
+        /* Finer left shift */
+        gap: 10px !important;
+    }
+
+    .hero {
+        height: 40vh;
+        /* Even shorter for small mobiles */
+        padding: 20px;
+        /* Add padding to prevent edge hugging */
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-actions .btn {
+        padding: 10px 20px;
+        /* Smaller buttons for touch */
+    }
+
+    .categories-section .category-card {
+        padding: 15px;
+    }
+
+    .categories-section .category-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .categories-section .shop-now-link {
+        font-size: 0.9rem;
+        /* Smaller link text */
+    }
+
+    .promo-card {
+        padding: 15px;
+    }
+
+    .promo-card h3 {
+        font-size: 1.2rem;
+    }
+
     .gallery-grid {
         grid-template-columns: 1fr;
         /* Single column for tiny screens */
         gap: 8px;
     }
-}
 
-@media (max-width: 480px) {
     .global-sidebar {
         width: 80vw;
         /* Slightly narrower for very small screens */
@@ -4946,24 +4843,7 @@ textarea.form-control {
         /* Shorter links */
         font-size: 1rem;
     }
-}
 
-@media (max-width: 768px) {
-    .section-padding {
-        padding: 60px 15px;
-        /* Reduce for mobiles */
-    }
-
-    h2 {
-        font-size: 2rem;
-    }
-
-    .container {
-        padding: 15px;
-    }
-}
-
-@media (max-width: 480px) {
     .section-padding {
         padding: 40px 10px;
     }
@@ -4975,5 +4855,69 @@ textarea.form-control {
     p,
     .text-lead {
         font-size: 0.95rem;
+    }
+
+    /* Additional fixes for header on very small screens to prevent cutting */
+    .site-header {
+        height: 60px;
+        /* FIXED: Smaller header height to fit better on tiny screens without vertical cut */
+    }
+
+    .header-inner {
+        padding: 6px 10px 6px 50px !important;
+        /* FIXED: Reduce paddings to allow more horizontal space for logo and title */
+    }
+
+    .logo {
+        font-size: 16px;
+        /* FIXED: Smaller font size to prevent horizontal overflow and cutting */
+        gap: 4px;
+        /* FIXED: Tighter gap for compactness */
+    }
+
+    .logo img {
+        height: 40px;
+        /* FIXED: Smaller logo image to fit within reduced header */
+    }
+
+    .icon-btn {
+        width: 32px !important;
+        /* FIXED: Smaller icons to free up space */
+        height: 32px !important;
+    }
+
+    .header-actions {
+        gap: 4px;
+        /* FIXED: Tighter gaps to reduce overall width */
+    }
+
+    body {
+        padding-top: 60px;
+        /* FIXED: Match reduced header height */
+    }
+
+    .site-header.scrolled {
+        height: 45px !important;
+        /* FIXED: Adjust scrolled height proportionally smaller */
+    }
+
+    .site-header.scrolled .header-inner {
+        padding: 3px 6px 3px 50px !important;
+        /* FIXED: Reduce paddings for scrolled state */
+    }
+
+    .site-header.scrolled .logo img {
+        height: 35px !important;
+        /* FIXED: Smaller in scrolled state */
+    }
+
+    .site-header.scrolled .logo {
+        font-size: 14px !important;
+        /* FIXED: Smaller font in scrolled state */
+    }
+
+    body.scrolled-parent {
+        padding-top: 45px !important;
+        /* FIXED: Match reduced scrolled height */
     }
 }
