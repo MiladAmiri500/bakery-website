@@ -475,23 +475,22 @@ app.get('/products', addNestedCategories, async (req, res) => {
 
     res.render('products', { currentCategory, subcategories, products, isSubcategoryView, allCategories, maxPrice });
 });
+// app.js (update /product/:id to fetch 10 related)
 app.get('/product/:id', addNestedCategories, async (req, res) => {
     const product = await Product.findById(req.params.id).populate('category');
     if (!product) return res.status(404).send('Product not found');
-    let relatedProducts = await Product.find({ category: product.category, _id: { $ne: product._id } }).limit(6);
+    let relatedProducts = await Product.find({ category: product.category, _id: { $ne: product._id } }).limit(10);
 
-    const computeFlags = (products) => {
-        return products.map(p => ({
-            ...p.toObject(),
-            isInCart: (req.user ? req.user.cart.some(item => item.productId.toString() === p._id.toString()) : req.session.cart.some(item => item.productId === p._id.toString())) || false,
-            isWishlisted: (req.user ? req.user.wishlist.some(id => id.toString() === p._id.toString()) : req.session.wishlist.includes(p._id.toString())) || false
-        }));
-    };
+    const computeFlags = (p) => ({
+        ...p.toObject(),
+        isInCart: (req.user ? req.user.cart.some(item => item.productId.toString() === p._id.toString()) : req.session.cart.some(item => item.productId === p._id.toString())) || false,
+        isWishlisted: (req.user ? req.user.wishlist.some(id => id.toString() === p._id.toString()) : req.session.wishlist.includes(p._id.toString())) || false
+    });
+
+    relatedProducts = relatedProducts.map(computeFlags);
 
     const isInCart = (req.user ? req.user.cart.some(item => item.productId.toString() === product._id.toString()) : req.session.cart.some(item => item.productId === product._id.toString())) || false;
     const isWishlisted = (req.user ? req.user.wishlist.some(id => id.toString() === product._id.toString()) : req.session.wishlist.includes(product._id.toString())) || false;
-    relatedProducts = computeFlags(relatedProducts);
-
     const currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
     res.render('product-detail', { product, relatedProducts, user: req.user, isWishlisted, isInCart, currentUrl });
 });

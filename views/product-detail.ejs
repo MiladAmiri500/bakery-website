@@ -1,10 +1,11 @@
+<!-- views/product-detail.ejs (updated wishlist to AJAX/guest) -->
 <!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ayoob Bakery Australia — <%= product.name %>
+    <title>FreshCart — <%= product.name %>
     </title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -54,8 +55,7 @@
                                 <a href="#reviews" class="rating-count">(<%= product.reviews.length %> Reviews)</a>
                             </div>
 
-                            <p class="product-price">
-                                $<%= product.price.toFixed(2) %> / <%= product.unit %>
+                            <p class="product-price">$<%= product.price.toFixed(2) %> / <%= product.unit %>
                             </p>
 
                             <p class="product-description">
@@ -63,24 +63,26 @@
                             </p>
 
                             <div class="product-actions">
-                                <form action="/cart/add/<%= product._id %>" method="POST">
-                                    <div class="quantity-selector">
-                                        <button type="button" class="quantity-btn qty-minus">-</button>
-                                        <input type="text" id="quantity" name="quantity" value="1" readonly
-                                            class="qty-input">
-                                        <button type="button" class="quantity-btn qty-plus">+</button>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-shopping-cart"></i>
-                                        Add to Cart</button>
+                                <form action="/cart/add/<%= product._id %>" method="POST" class="add-to-cart-form"
+                                    data-product-id="<%= product._id %>">
+                                    <% if (isInCart) { %>
+                                        <button type="button" class="btn-add-cart added"
+                                            onclick="location.href='/cart'">Added to Cart</button>
+                                        <% } else { %>
+                                            <div class="quantity-selector">
+                                                <button type="button" class="quantity-btn qty-minus">-</button>
+                                                <input type="text" id="quantity" name="quantity" value="1" readonly
+                                                    class="qty-input">
+                                                <button type="button" class="quantity-btn qty-plus">+</button>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary"><i
+                                                    class="fas fa-shopping-cart"></i> Add to Cart</button>
+                                            <% } %>
                                 </form>
-                                <% if (user) { %>
-                                    <form action="/wishlist/add/<%= product._id %>" method="POST">
-                                        <button type="submit" class="btn btn-wishlist"><i
-                                                class="fas fa-heart <%= isWishlisted ? 'filled' : '' %>"></i></button>
-                                    </form>
-                                    <% } else { %>
-                                        <a href="/login" class="btn btn-wishlist"><i class="fas fa-heart"></i></a>
-                                        <% } %>
+                                <form action="/wishlist/add/<%= product._id %>" method="POST" class="wishlist-form">
+                                    <button type="submit" class="btn btn-wishlist"><i
+                                            class="fas fa-heart <%= isWishlisted ? 'filled' : '' %>"></i></button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -161,18 +163,18 @@
                         </div>
                     </div>
 
-                    <!-- Related Products Section -->
+                    <!-- Related Products Section (with side scrolling and View All) -->
                     <section class="related-products">
                         <h3>Related Products</h3>
-                        <div class="swiper relatedSwiper">
-                            <div class="swiper-wrapper">
-                                <% relatedProducts.forEach(related=> { %>
-                                    <div class="swiper-slide">
-                                        <%- include('partials/product-card', { product: related, isWishlisted: user ?
-                                            user.wishlist.includes(related._id) : false, quantity: 1 }) %>
-                                    </div>
-                                    <% }) %>
+                        <div class="related-container">
+                            <div class="related-grid">
+                                <% relatedProducts.forEach(product=> { %>
+                                    <%- include('partials/product-card', { product, isWishlisted: isWishlisted,
+                                        quantity: 1 }) %>
+                                        <% }) %>
                             </div>
+                            <a href="/products?category=<%= product.category._id %>"
+                                class="btn btn-primary view-all-btn">View All</a>
                         </div>
                     </section>
                 </section>
@@ -181,6 +183,58 @@
 
                     <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
                     <script src="/js/scripts.js"></script>
+                    <script>
+                        // AJAX for detail page add to cart
+                        document.querySelector('.add-to-cart-form')?.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const form = e.target;
+                            const productId = form.dataset.productId;
+                            const quantityInput = form.querySelector('#quantity');
+                            const quantity = parseFloat(quantityInput.value) || 1;
+
+                            try {
+                                const response = await fetch(`/cart/add/${productId}`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: `quantity=${quantity}`
+                                });
+                                if (response.ok) {
+                                    // Update UI to show 'Added to Cart'
+                                    form.innerHTML = `<button type="button" class="btn-add-cart added" onclick="location.href='/cart'">Added to Cart</button>`;
+                                } else {
+                                    alert('Error adding to cart');
+                                }
+                            } catch (err) {
+                                console.error('Add to cart error:', err);
+                                alert('Error adding to cart');
+                            }
+                        });
+
+                        // AJAX for detail page wishlist
+                        document.querySelector('.wishlist-form')?.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const form = e.target;
+                            const button = form.querySelector('.btn-wishlist');
+                            const productId = '<%= product._id %>';
+
+                            try {
+                                const response = await fetch(`/wishlist/add/${productId}`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: ''
+                                });
+                                if (response.ok) {
+                                    const data = await response.json();
+                                    button.querySelector('i').classList.toggle('filled', data.added);
+                                } else {
+                                    alert('Error updating wishlist');
+                                }
+                            } catch (err) {
+                                console.error('Wishlist error:', err);
+                                alert('Error updating wishlist');
+                            }
+                        });
+                    </script>
 </body>
 
 </html>

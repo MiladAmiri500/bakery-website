@@ -1681,6 +1681,196 @@ footer {
     box-shadow: var(--box-shadow);
 }
 
+/* Add to public/css/styles.css under /* --- Product Detail (From snippet 5 + current) --- */
+
+/* Update in public/css/styles.css for related products */
+
+.related-products {
+    margin-top: 40px;
+}
+
+.related-products h3 {
+    margin-bottom: 20px;
+}
+
+.related-container {
+    position: relative;
+}
+
+.related-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 10px;
+    /* Space for scrollbar */
+    scroll-snap-type: x mandatory;
+}
+
+.related-grid .product-card {
+    flex: 0 0 auto;
+    /* Remove fixed width to allow natural sizing */
+    min-width: 300px;
+    /* Match main product-card min-width */
+    /* Minimum to prevent too small, but allow shrink if needed */
+    width: auto;
+    /* Natural width based on content */
+    scroll-snap-align: start;
+    background: var(--bg-color);
+    /* Match main */
+    border-radius: var(--radius);
+    /* Match main */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    /* Match main */
+    overflow: visible;
+    /* Match main */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Match main */
+    position: relative;
+    /* Match main */
+}
+
+.related-grid .product-card:hover {
+    transform: translateY(-8px);
+    /* Match main hover */
+    box-shadow: var(--shadow);
+    /* Match main hover */
+}
+
+.related-grid .product-card-image {
+    height: 250px;
+    /* Match main image height */
+    padding: 0;
+    /* Match main */
+    border-bottom: 1px solid var(--card-border);
+    /* Match main */
+}
+
+.related-grid .product-card-image img {
+    width: 100%;
+    /* Match main */
+    height: 100%;
+    /* Match main */
+    object-fit: cover;
+    /* Match main */
+    border-radius: var(--radius) var(--radius) 0 0;
+    /* Match main */
+    border: none;
+    /* Match main */
+}
+
+.related-grid .product-card-info {
+    padding: 20px;
+    /* Match main */
+}
+
+.related-grid .product-title {
+    font-size: 1.6rem;
+    /* Match main */
+    color: var(--dark);
+    /* Match main */
+    margin: 5px 0 10px;
+    /* Match main */
+    text-decoration: none;
+    /* Match main */
+}
+
+.related-grid .product-price {
+    font-size: 1.8rem;
+    /* Match main */
+    font-weight: 600;
+    /* Match main */
+    color: var(--primary);
+    /* Match main */
+}
+
+.related-grid .action-row {
+    display: flex;
+    /* Match main */
+    gap: 10px;
+    /* Match main */
+    flex-wrap: nowrap;
+    /* Match main */
+}
+
+.related-grid .quantity-selector,
+.related-grid .weight-selector {
+    flex-basis: 120px;
+    /* Match main */
+    flex-grow: 0;
+    /* Match main */
+    min-width: 120px;
+    /* Match main */
+    background: var(--muted);
+    /* Match main */
+    border: 1px solid var(--border-color);
+    /* Match main */
+    border-radius: 50px;
+    /* Match main */
+    padding: 8px 12px;
+    /* Match main */
+    display: flex;
+    /* Match main */
+    align-items: center;
+    /* Match main */
+    justify-content: space-between;
+    /* Match main */
+}
+
+.related-grid .btn-add-cart {
+    background: var(--primary);
+    /* Match main */
+    color: white;
+    /* Match main */
+    border: none;
+    /* Match main */
+    padding: 12px;
+    /* Match main */
+    border-radius: 50px;
+    /* Match main */
+    cursor: pointer;
+    /* Match main */
+    font-weight: 600;
+    /* Match main */
+    font-size: 1rem;
+    /* Match main */
+    transition: all 0.3s ease;
+    /* Match main */
+    flex-basis: auto;
+    /* Match main */
+    min-width: 140px;
+    /* Match main */
+    white-space: nowrap;
+    /* Match main */
+    flex-grow: 1;
+    /* Match main */
+    display: flex;
+    /* Match main */
+    justify-content: center;
+    /* Match main */
+    align-items: center;
+    /* Match main */
+    gap: 8px;
+    /* Match main */
+    margin-left: auto;
+    /* Match main */
+}
+
+.related-grid .btn-add-cart:hover {
+    background: var(--accent);
+    /* Match main hover */
+    color: white;
+    /* Match main hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Match main hover */
+}
+
+.view-all-btn {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
 .product-gallery {
     /* From 5 */
     display: flex;
@@ -3850,6 +4040,8 @@ textarea.form-control {
         opacity: 1 !important;
         visibility: visible !important;
         /* FIXED: Make visible only when open */
+        z-index: 1004 !important;
+        /* FIXED: Increase z-index when open to bring sidebar above the main header, preventing overlap or hiding */
     }
 
     /* Content: Always fill & scroll */
@@ -4067,11 +4259,20 @@ textarea.form-control {
         background: rgba(139, 69, 19, 0.1) !important;
         /* Hover tint */
     }
+
+    /* New fixes for product card quantity selector */
+    .product-card .quantity-selector {
+        width: auto !important;
+    }
+
+    .product-card .action-row {
+        flex-wrap: nowrap !important;
+    }
 }
 
 @media (max-width: 400px) {
     .action-row {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 8px;
         /* Add gap for better spacing */
     }
@@ -4080,8 +4281,8 @@ textarea.form-control {
     .weight-selector {
         flex-basis: auto;
         /* Allow natural width instead of 100% */
-        min-width: 100px;
-        /* Minimum width to prevent too small */
+        min-width: 80px;
+        /* Reduced minimum width to fit better */
         flex-grow: 0;
         /* Don't grow to fill */
     }
@@ -4091,8 +4292,8 @@ textarea.form-control {
         /* Allow natural width */
         flex-grow: 1;
         /* Grow to fill remaining space */
-        min-width: 120px;
-        /* Ensure button doesn't collapse */
+        min-width: 100px;
+        /* Reduced to fit better */
     }
 }
 
@@ -4116,8 +4317,6 @@ textarea.form-control {
     }
 
     .profile-container .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
-        gap: 20px !important;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 24px;
         /* Increase gap for breathing room */
@@ -4433,8 +4632,8 @@ textarea.form-control {
     }
 
     .profile-container .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
-        /* Wider for mobile visibility */
+        grid-template-columns: 1fr !important;
+        /* Changed to single column to prevent any potential overlap on mobile */
         gap: 24px !important;
     }
 
@@ -4695,6 +4894,11 @@ textarea.form-control {
     .container {
         padding: 15px;
     }
+
+    .related-grid .product-card {
+        min-width: 200px;
+        /* Smaller on mobile */
+    }
 }
 
 @media (max-width: 480px) {
@@ -4919,5 +5123,34 @@ textarea.form-control {
     body.scrolled-parent {
         padding-top: 45px !important;
         /* FIXED: Match reduced scrolled height */
+    }
+
+    /* Sidebar header adjustments for smaller screens */
+    .global-sidebar .sidebar-header {
+        padding: 8px 40px 8px 12px !important;
+        /* FIXED: Reduce padding to fit smaller screens better */
+    }
+
+    .global-sidebar .sidebar-logo {
+        font-size: 1.2rem !important;
+        /* FIXED: Smaller title font size to prevent overlap with close button and fit smaller screens */
+        max-width: calc(100% - 50px) !important;
+        /* FIXED: Adjust max-width to give more space for close button without overlap */
+    }
+
+    #close-sidebar-btn {
+        right: 12px !important;
+        /* FIXED: Slightly reduce right position to fit within reduced padding */
+        width: 28px !important;
+        /* FIXED: Smaller close button for compact fit */
+        height: 28px !important;
+        font-size: 1rem !important;
+        /* FIXED: Smaller icon for proportion */
+    }
+
+    .sidebar-logo img {
+        width: 28px !important;
+        /* FIXED: Scale down logo image accordingly */
+        height: 28px !important;
     }
 }
