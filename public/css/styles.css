@@ -3844,6 +3844,321 @@ textarea.form-control {
     margin-bottom: 15px;
 }
 
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    position: relative;
+    margin-bottom: 40px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    /* Dark overlay for text readability */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 4.5rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content .text-lead {
+    font-size: 1.3rem;
+    margin-top: 20px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Section Styling (Asymmetrical Layouts) */
+.about-section {
+    padding: 60px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+}
+
+.about-section:nth-child(odd) {
+    background-color: var(--secondary-color);
+}
+
+.about-section-text,
+.about-section-image {
+    flex: 1;
+    min-width: 300px;
+}
+
+.about-section-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.image-right {
+    order: 2;
+}
+
+.text-left {
+    order: 1;
+}
+
+/* Values Section */
+.values-section {
+    background-color: var(--secondary-color);
+}
+
+.values-section h2 {
+    text-align: center;
+}
+
+/* Overlapping Images Section */
+.process-images {
+    position: relative;
+    min-height: 400px;
+    /* For alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-large {
+    width: 90%;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    position: relative;
+    z-index: 2;
+}
+
+.img-small {
+    width: 50%;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 6px solid white;
+    position: absolute;
+    bottom: -40px;
+    right: 0;
+    z-index: 3;
+}
+
+/* Meet the Baker Section */
+.baker-section {
+    background-color: var(--secondary-color);
+}
+
+.baker-card {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+}
+
+.baker-image {
+    flex: 0 0 40%;
+}
+
+.baker-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.baker-info {
+    padding: 40px;
+}
+
+/* CTA Section */
+.cta-section {
+    position: relative;
+    padding: 100px 20px;
+    background-size: cover;
+    background-position: center 30%;
+    background-attachment: fixed;
+    text-align: center;
+    color: white;
+    border-radius: var(--border-radius);
+    margin: 40px auto;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(139, 69, 19, 0.6);
+    /* Bakery brown overlay */
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+.cta-content h2 {
+    color: white;
+}
+
+/* CTA Button (adapted to .btn-primary) */
+.btn-primary {
+    display: inline-block;
+    background-color: var(--accent);
+    color: var(--dark);
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background-color: var(--bg-color);
+    color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.page-header {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: var(--bg-color);
+}
+
+.page-header p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 10px auto 0;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* --- Contact Grid Layout --- */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.info-card {
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 35px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.8rem;
+}
+
+.info-card h3 i {
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
+.info-card a {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--primary);
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.info-card a:hover {
+    text-decoration: underline;
+}
+
+.info-card p,
+.info-card li {
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+/* Specific card styles */
+.hours-list {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.hours-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.hours-list li strong {
+    font-weight: 500;
+}
+
+.map-container {
+    width: 100%;
+    height: 300px;
+    /* Set a fixed height for the map image */
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.map-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.note {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-top: 15px;
+}
+
+/* --- Hero Image --- */
+.hero-image {
+    height: 400px;
+    background-size: cover;
+    background-position: center 30%;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-top: 40px;
+}
+
+/* Responsive for Home Page Sections */
 /* Responsive for Home Page Sections */
 @media (max-width: 767px) {
     .icon-btn {
@@ -4268,6 +4583,21 @@ textarea.form-control {
     .product-card .action-row {
         flex-wrap: nowrap !important;
     }
+
+    /* FIXED: Ensure wishlist/cart .products-grid uses single column on mobile to prevent stacking/overlap */
+    .wishlist .products-grid,
+    .cart .products-grid,
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        /* Force single column for all product grids on mobile */
+        gap: 16px !important;
+    }
+
+    .product-card {
+        min-width: auto !important;
+        /* Remove min-width constraint on mobile */
+        width: 100% !important;
+    }
 }
 
 @media (max-width: 400px) {
@@ -4616,9 +4946,46 @@ textarea.form-control {
         /* Stack buttons vertically */
         gap: 15px;
     }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-grid.reverse-mobile {
+        grid-auto-flow: dense;
+    }
+
+    .about-grid.reverse-mobile .about-text {
+        grid-row: 1;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .process-images {
+        margin-bottom: 30px;
+    }
+
+    .baker-card {
+        flex-direction: column;
+    }
+
+    .baker-image {
+        flex: 0 0 300px;
+        width: 100%;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
+
+    /* FIXED: Consolidated .products-grid rule to prevent overlap/stacking on wishlist/cart - single column priority */
+    .wishlist .products-grid,
+    .cart .products-grid,
     .products-grid {
         grid-template-columns: 1fr !important;
         /* Force single column to prevent overlap */
@@ -4899,9 +5266,51 @@ textarea.form-control {
         min-width: 200px;
         /* Smaller on mobile */
     }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 2.2rem;
+    }
+
+    .img-small {
+        width: 60%;
+        bottom: -20px;
+        right: 10px;
+    }
+
+    .cta-section {
+        background-attachment: scroll;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2.2rem;
+    }
+
+    .page-header {
+        padding: 40px 20px;
+    }
+
+    .hero-image {
+        height: 300px;
+    }
 }
 
 @media (max-width: 480px) {
+
+    /* FIXED: Further tighten .products-grid for very small screens like A53 (360px) to ensure no overlap/stacking */
+    .wishlist .products-grid,
+    .cart .products-grid,
     .products-grid {
         grid-template-columns: 1fr !important;
         gap: 12px !important;

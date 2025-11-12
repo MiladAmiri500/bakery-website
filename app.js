@@ -278,11 +278,7 @@ app.post('/wishlist/add/:productId', async (req, res) => {
             added = true;
         }
     }
-    if (req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        res.json({ added });
-    } else {
-        res.redirect(req.headers.referer || '/wishlist');
-    }
+    res.json({ added });
 });
 // Remove from wishlist
 app.post('/wishlist/remove/:index', async (req, res) => {

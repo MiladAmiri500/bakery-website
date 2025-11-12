@@ -1,22 +1,20 @@
+<!-- views/contact.ejs -->
 <!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayoob Bakery Australia - Contact Us</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ayoob Bakery Australia — Contact Us</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
-
     <%- include('partials/sidebar') %>
         <%- include('partials/category-sidebar') %>
             <%- include('partials/header') %>
@@ -25,29 +23,28 @@
                     <section class="page-header">
                         <div class="container">
                             <h1>Get in Touch</h1>
-                            <p>We're always happy to hear from you. Whether you have a question about our products,
-                                an order inquiry, or just want to say hello, here's how you can reach us.</p>
+                            <p>We're always happy to hear from you. Whether you have a question about our menu, a custom
+                                cake inquiry, or just want to say hello, here's how you can reach us.</p>
                         </div>
                     </section>
 
                     <div class="container">
                         <div class="contact-grid">
-
                             <div class="info-card">
                                 <h3><i class="fas fa-phone"></i> Call Us</h3>
                                 <p>For general inquiries or to place a same-day order, give us a ring!</p>
                                 <a href="tel:+1234567890">+1 (234) 567-890</a>
-                                <p class="note">For custom orders, please allow 48 hours notice.</p>
+                                <p class="note">For custom cake inquiries, please allow 48 hours notice.</p>
 
-                                <h3>Email Us</h3>
-                                <p>For orders, feedback, and inquiries.</p>
-                                <a href="mailto:hello@AyoobBakeryAustralia.com">hello@AyoobBakeryAustralia.com</a>
+                                <h3 style="margin-top: 30px;"><i class="fas fa-envelope"></i> Email Us</h3>
+                                <p>For custom orders, catering, and feedback.</p>
+                                <a href="mailto:hello@ayoobbakery.com.au">hello@ayoobbakery.com.au</a>
                                 <p class="note">We do our best to respond to all emails within one business day.</p>
                             </div>
 
                             <div class="info-card">
                                 <h3><i class="fas fa-clock"></i> Our Hours</h3>
-                                <p>Stop by for your daily groceries, fresh produce, or a quick snack.</p>
+                                <p>Stop by for your daily bread, a pastry, or a warm cup of coffee.</p>
                                 <ul class="hours-list">
                                     <li><strong>Tuesday - Friday</strong> <span>7:00 AM - 6:00 PM</span></li>
                                     <li><strong>Saturday</strong> <span>8:00 AM - 4:00 PM</span></li>
@@ -57,32 +54,30 @@
                             </div>
                         </div>
 
-                        <div class="info-card">
+                        <div class="info-card" style="margin-top: 30px;">
                             <div class="contact-grid">
                                 <div>
                                     <h3><i class="fas fa-map-marker-alt"></i> Visit Us</h3>
-                                    <p>123 Fresh Street,<br>Downtown,
-                                        Grocerysville, 90210</p>
-                                    <p class="note">We are located on the corner of Fresh St. and Main, directly
-                                        across from the town square. Metered street parking is available on both
-                                        streets.</p>
+                                    <p style="font-size: 1.1rem; font-weight: 500;">123 Bread Street,<br>Downtown,
+                                        Flavorville, 90210</p>
+                                    <p class="note">We are located on the corner of Bread St. and Main, directly across
+                                        from the town square. Metered street parking is available on both streets.</p>
                                 </div>
                                 <div class="map-container">
-                                    <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2"
-                                        alt="A map showing the store's location"> <!-- Grocery map placeholder -->
+                                    <img src="https://i.ibb.co/9G8XqR0/static-map.png"
+                                        alt="A map showing the bakery's location">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="hero-image" aria-label="A beautiful display of fresh produce in a grocery store">
-                        </div>
-                        <!-- Grocery-themed hero -->
-
+                        <div class="hero-image" aria-label="A beautiful display of pastries in a bakery case"></div>
                     </div>
                 </main>
 
                 <%- include('partials/footer') %>
 
+                    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+                    <script src="/js/scripts.js"></script>
 </body>
 
 </html>

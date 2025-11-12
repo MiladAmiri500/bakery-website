@@ -78,8 +78,8 @@
                                     </div>
                                     <% } else { %>
                                         <% products.forEach(product=> { %>
-                                            <%- include('partials/product-card', { product, isWishlisted: user ?
-                                                user.wishlist.includes(product._id) : false, quantity: 1 }) %>
+                                            <%- include('partials/product-card', { product, isWishlisted:
+                                                product.isWishlisted, quantity: 1 }) %>
                                                 <% }) %>
                                                     <% } %>
                             </div>

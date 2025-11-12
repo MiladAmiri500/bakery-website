@@ -1,3 +1,4 @@
+<!-- views/about.ejs -->
 <!doctype html>
 <html lang="en">
 
@@ -19,28 +20,28 @@
             <%- include('partials/header') %>
 
                 <main>
-                    <section class="hero">
+                    <section class="hero-section">
                         <div class="hero-content">
-                            <h1>Our Story is Fresh Every Day</h1>
-                            <p class="text-lead">Quality, freshness, and community in every aisle.</p>
+                            <h1>Our Story is Baked with Passion</h1>
+                            <p class="text-lead">Warmth, tradition, and artistry in every loaf.</p>
                         </div>
                     </section>
 
                     <section class="section-padding">
                         <div class="container about-grid">
                             <div class="about-text">
-                                <h2>From a Single Seed of Inspiration...</h2>
+                                <h2>From a Single Spark of Passion...</h2>
                                 <p class="text-lead">Ayoob Bakery Australia wasn't born from a business plan. It was
-                                    born from a
-                                    passion: the joy of fresh produce, the satisfaction of quality ingredients, the
-                                    warmth of a neighborhood market.</p>
-                                <p>Our founder, Alex Rivera, spent years sourcing the best local goods, learning from
-                                    farmers and suppliers before opening our doors in 2015 with one mission: to bring
-                                    fresh, affordable, and sustainable groceries to every family.</p>
+                                    born from a memory: the smell of fresh bread in a grandmother's kitchen, the warmth
+                                    of a shared pastry, the simple joy of a perfect cookie.</p>
+                                <p>Our founder, Ayoob, spent years perfecting his craft, traveling and learning from
+                                    artisan bakers before returning home with a single mission: to create a community
+                                    hub where quality is never compromised, and every customer feels like family. In
+                                    2015, he opened our doors, and the ovens haven't cooled since.</p>
                             </div>
                             <div class="about-image">
-                                <img src="https://images.unsplash.com/photo-1579113800032-c38a775f2345"
-                                    alt="Our founder smiling in the store">
+                                <img src="https://i.ibb.co/pwnGqP0/bakery-founder.jpg"
+                                    alt="Our founder, Ayoob, smiling in the bakery">
                             </div>
                         </div>
                     </section>
@@ -52,19 +53,20 @@
                                 <div class="value-card">
                                     <div class="value-icon"><i class="fas fa-leaf"></i></div>
                                     <h3>Quality Ingredients</h3>
-                                    <p>We source local, organic produce and goods. No shortcuts, just fresh and natural.
-                                    </p>
+                                    <p>We believe great baking starts with great ingredients. We source local, organic
+                                        flour, farm-fresh eggs, and real butter. No shortcuts, no compromises.</p>
                                 </div>
                                 <div class="value-card">
                                     <div class="value-icon"><i class="fas fa-hand-sparkles"></i></div>
-                                    <h3>Sustainable Practices</h3>
-                                    <p>We prioritize eco-friendly sourcing and packaging to protect our planet.</p>
+                                    <h3>Artisan Techniques</h3>
+                                    <p>Our bakers are artists. We honor long-fermentation processes for our breads and
+                                        meticulous hand-lamination for our pastries. You can taste the difference.</p>
                                 </div>
                                 <div class="value-card">
                                     <div class="value-icon"><i class="fas fa-heart"></i></div>
-                                    <h3>Community Focus</h3>
-                                    <p>We're more than a store; we're your neighbor, supporting local farmers and
-                                        causes.</p>
+                                    <h3>Community & Comfort</h3>
+                                    <p>We're more than a bakery; we're your neighbor. We strive to be a welcoming space
+                                        for all, where you can find comfort, connection, and a delicious treat.</p>
                                 </div>
                             </div>
                         </div>
@@ -73,35 +75,38 @@
                     <section class="section-padding">
                         <div class="container about-grid reverse-mobile">
                             <div class="process-images">
-                                <img src="https://images.unsplash.com/photo-1603048297172-4c3c54e74509"
-                                    alt="Fresh fruits being selected" class="img-large">
-                                <img src="https://images.unsplash.com/photo-1589927986089-35812388d1a6"
-                                    alt="Close-up of organic vegetables" class="img-small">
+                                <img src="https://i.ibb.co/X8g69W9/bakery-knead.jpg" alt="Hands kneading sourdough"
+                                    class="img-large">
+                                <img src="https://i.ibb.co/qD4kS0V/bakery-pastry-close.jpg"
+                                    alt="Close-up of a flaky croissant" class="img-small">
                             </div>
                             <div class="about-text">
-                                <h2>Fresh with Care & Quality</h2>
-                                <p class="text-lead">In a fast world, we choose freshness and sustainability.</p>
-                                <p>Our produce is hand-picked daily from trusted farms. Our shelves are stocked with
-                                    care, ensuring every item meets our high standards. This dedication creates a
-                                    shopping experience that's healthy, convenient, and joyful.</p>
-                                <p>When you shop with us, you're getting the best nature has to offer.</p>
+                                <h2>Baked with Heart & Hand</h2>
+                                <p class="text-lead">In a world of speed and convenience, we choose patience and craft.
+                                </p>
+                                <p>Our sourdough starter is fed daily, a living part of our bakery's soul. Our
+                                    croissants take three days to make, a loving process of folding and resting. This
+                                    dedication isn't just about tradition; it's about creating food that is more
+                                    flavorful, more nutritious, and more satisfying.</p>
+                                <p>When you bite into our bread, you're tasting time, care, and the skill of hands that
+                                    love to bake.</p>
                             </div>
                         </div>
                     </section>
 
-                    <section class="team-section container-fluid">
+                    <section class="baker-section container-fluid">
                         <div class="container">
-                            <div class="team-card">
-                                <div class="team-image">
-                                    <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578"
-                                        alt="A smiling team member stocking shelves">
+                            <div class="baker-card">
+                                <div class="baker-image">
+                                    <img src="https://i.ibb.co/P9tPjCj/bakery-team.jpg"
+                                        alt="A smiling baker holding a tray of fresh bread">
                                 </div>
-                                <div class="team-info">
-                                    <h3>A Word From Our Store Manager</h3>
-                                    <p>"Ayoob Bakery Australia is about more than groceries—it's about nourishing lives.
-                                        Seeing
-                                        families leave with smiles and full carts makes every day rewarding."</p>
-                                    <p><strong>- Jordan Lee, Store Manager</strong></p>
+                                <div class="baker-info">
+                                    <h3>A Word From Our Head Baker</h3>
+                                    <p>"Baking isn't just my job; it's how I share joy. Seeing a customer's face light
+                                        up when they take that first bite—that's what it's all about. We're not just
+                                        making food; we're making someone's day."</p>
+                                    <p><strong>- Maria Jenkins, Head Baker</strong></p>
                                 </div>
                             </div>
                         </div>
@@ -110,17 +115,19 @@
                     <div class="container">
                         <section class="cta-section">
                             <div class="cta-content">
-                                <h2>Come Shop Fresh!</h2>
-                                <p class="text-lead">We're
-                                    stocking something special just for you. <br>Visit our store and experience the
-                                    freshness of Ayoob Bakery Australia.</p>
-                                <a href="/products" class="btn-primary">Explore Our Products</a>
+                                <h2>Come Say Hello!</h2>
+                                <p class="text-lead">We're baking up something special just for you. <br>Visit our shop
+                                    and experience the warmth of Ayoob Bakery Australia.</p>
+                                <a href="/products" class="btn-primary">Explore Our Menu</a>
                             </div>
                         </section>
                     </div>
                 </main>
 
                 <%- include('partials/footer') %>
+
+                    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+                    <script src="/js/scripts.js"></script>
 </body>
 
 </html>

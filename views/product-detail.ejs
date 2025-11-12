@@ -201,39 +201,73 @@
                                 if (response.ok) {
                                     // Update UI to show 'Added to Cart'
                                     form.innerHTML = `<button type="button" class="btn-add-cart added" onclick="location.href='/cart'">Added to Cart</button>`;
-                                } else {
-                                    alert('Error adding to cart');
                                 }
                             } catch (err) {
                                 console.error('Add to cart error:', err);
-                                alert('Error adding to cart');
                             }
                         });
 
-                        // AJAX for detail page wishlist
-                        document.querySelector('.wishlist-form')?.addEventListener('submit', async (e) => {
-                            e.preventDefault();
-                            const form = e.target;
-                            const button = form.querySelector('.btn-wishlist');
-                            const productId = '<%= product._id %>';
+                        // Add "Go to Wishlist" link if already wishlisted on page load
+                        const wishlistForm = document.querySelector('.wishlist-form');
+                        if (wishlistForm) {
+                            const button = wishlistForm.querySelector('.btn-wishlist');
+                            const icon = button.querySelector('i');
+                            if (icon && icon.classList.contains('filled')) {
+                                button.insertAdjacentHTML('afterend', '<a href="/wishlist" class="go-to-wishlist">Go to Wishlist</a>');
+                            }
 
-                            try {
-                                const response = await fetch(`/wishlist/add/${productId}`, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                    body: ''
-                                });
-                                if (response.ok) {
-                                    const data = await response.json();
-                                    button.querySelector('i').classList.toggle('filled', data.added);
-                                } else {
-                                    alert('Error updating wishlist');
+                            // AJAX for detail page wishlist
+                            wishlistForm.addEventListener('submit', async (e) => {
+                                e.preventDefault();
+                                const button = e.target.querySelector('.btn-wishlist');
+                                const icon = button.querySelector('i');
+                                const productId = '<%= product._id %>';
+
+                                // If already wishlisted (filled), navigate to wishlist instead of toggling
+                                if (icon.classList.contains('filled')) {
+                                    window.location.href = '/wishlist';
+                                    return;
                                 }
-                            } catch (err) {
-                                console.error('Wishlist error:', err);
-                                alert('Error updating wishlist');
-                            }
-                        });
+
+                                try {
+                                    const response = await fetch(`/wishlist/add/${productId}`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                        body: ''
+                                    });
+                                    console.log('Wishlist response status:', response.status);  // Debug: Check if 200
+                                    if (response.ok) {
+                                        let data;
+                                        try {
+                                            data = await response.json();
+                                            console.log('Wishlist response data:', data);  // Debug: See exact JSON
+                                        } catch (jsonErr) {
+                                            console.error('JSON parse error:', jsonErr);  // Debug: If not JSON
+                                            // Fallback: Assume added if no JSON but OK status
+                                            data = { added: true };
+                                        }
+                                        // Update UI if added (or fallback)
+                                        if (data.added) {
+                                            icon.classList.add('filled');
+                                            // Remove any existing link first (in case of re-clicks)
+                                            const existingLink = button.nextElementSibling;
+                                            if (existingLink && existingLink.classList.contains('go-to-wishlist')) {
+                                                existingLink.remove();
+                                            }
+                                            // Add "Go to Wishlist" link on the right
+                                            button.insertAdjacentHTML('afterend', '<a href="/wishlist" class="go-to-wishlist">Go to Wishlist</a>');
+                                            console.log('UI updated: Icon filled and link added');  // Debug
+                                        } else {
+                                            console.log('No update: data.added was false/missing');  // Debug
+                                        }
+                                    } else {
+                                        console.error('Response not OK:', response.status);  // Debug
+                                    }
+                                } catch (err) {
+                                    console.error('Wishlist error:', err);
+                                }
+                            });
+                        }
                     </script>
 </body>
 
